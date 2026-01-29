@@ -1231,6 +1231,7 @@ def init(
         "Optional commands that you can use for your specs [bright_black](improve quality & confidence)[/bright_black]",
         "",
         f"○ [cyan]/arb.clarify[/] [bright_black](optional)[/bright_black] - Ask structured questions to de-risk ambiguous areas before planning (run before [cyan]/arb.plan[/] if used)",
+        f"○ [cyan]/arb.analyze[/] [bright_black](optional)[/bright_black] - Cross-artifact consistency & alignment analysis (after [cyan]/arb.plan[/])",
         f"○ [cyan]/arb.checklist[/] [bright_black](optional)[/bright_black] - Generate quality checklists to validate requirements completeness, clarity, and consistency (after [cyan]/arb.plan[/])"
     ]
     enhancements_panel = Panel("\n".join(enhancement_lines), title="Enhancement Commands", border_style="cyan", padding=(1,2))

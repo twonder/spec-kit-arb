@@ -247,6 +247,7 @@ Additional commands for enhanced quality and validation:
 | Command          | Description                                                                                                                          |
 | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `/arb.clarify`   | Clarify underspecified areas (recommended before `/arb.plan`; formerly `/quizme`)                                                    |
+| `/arb.analyze`   | Cross-artifact consistency & alignment analysis (run after `/arb.plan` to validate spec-plan alignment)                              |
 | `/arb.checklist` | Generate custom quality checklists that validate requirements completeness, clarity, and consistency (like "unit tests for English") |
 
 ### Environment Variables

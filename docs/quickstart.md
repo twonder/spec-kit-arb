@@ -115,6 +115,16 @@ Be specific about your tech stack and technical requirements:
 /arb.plan We are going to generate this using .NET Aspire, using Postgres as the database. The frontend should use Blazor server with drag-and-drop task boards, real-time updates. There should be a REST API created with a projects API, tasks API, and a notifications API.
 ```
 
+### Step 6: Analyze for Consistency (Optional)
+
+Use the `/arb.analyze` command to check for consistency between spec and plan:
+
+```bash
+/arb.analyze
+```
+
+This will identify any gaps, inconsistencies, or constitution violations before you proceed.
+
 ## Key Principles
 
 - **Be explicit** about what you're building and why
