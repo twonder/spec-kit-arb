@@ -113,3 +113,135 @@
 - **SC-002**: [Measurable metric, e.g., "System handles 1000 concurrent users without degradation"]
 - **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
 - **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
+
+## Architecture Decision Records *(mandatory)*
+
+<!--
+  ACTION REQUIRED: Reference all applicable ADRs.
+
+  RULES:
+  1. List ALL existing ADRs that constrain or guide this feature
+  2. If this spec proposes a NEW technology, pattern, or architectural approach:
+     - Create a new ADR BEFORE implementation begins
+     - Document alternatives considered and rationale for the choice
+  3. If this spec conflicts with an existing ADR:
+     - Either revise the spec to comply, OR
+     - Create a new ADR that supersedes the old one (with justification)
+
+  Use: ./scripts/bash/create-adr.sh "Decision title" to create new ADRs
+-->
+
+### Referenced ADRs
+
+- **[ADR-XXX](../adrs/ADR-XXX-title.md)**: [Brief description of how this ADR applies to the feature]
+- **[ADR-YYY](../adrs/ADR-YYY-title.md)**: [Brief description of relevance]
+
+### New ADRs Required
+
+<!--
+  List any new ADRs that need to be created for this spec.
+  Mark as TODO until created, then update with links.
+-->
+
+- [ ] **TODO**: [Decision topic] - [Why this needs an ADR]
+- [x] **[ADR-ZZZ](../adrs/ADR-ZZZ-title.md)**: [Created for this spec - brief description]
+
+### ADR Compliance Notes
+
+<!--
+  Document any tensions or tradeoffs with existing ADRs.
+  If none, state "This spec fully complies with all referenced ADRs."
+-->
+
+[Compliance notes or "This spec fully complies with all referenced ADRs."]
+
+## Availability Architecture *(mandatory for infrastructure/services)*
+
+<!--
+  ACTION REQUIRED: Declare the availability architecture for this feature.
+  Per Constitution Principle III, you MUST explicitly choose and justify your approach.
+
+  If this feature does not involve infrastructure or services (e.g., pure UI change,
+  documentation update), state "N/A - No infrastructure impact" and remove subsections.
+-->
+
+### Availability Approach
+
+**Chosen Approach**: [ ] Single Region | [ ] Multi-Region Active-Active | [ ] Multi-Region Active-Passive
+
+**Rationale**: [Why this approach was chosen - consider cost, latency, compliance, complexity]
+
+### Single Region Details *(if Single Region selected)*
+
+- **Region**: [e.g., us-east-1, eu-west-1]
+- **Region Selection Rationale**: [Why this specific region - user proximity, cost, compliance]
+- **Acceptable Downtime (RTO)**: [e.g., 4 hours, 1 hour, 15 minutes]
+- **Acceptable Data Loss (RPO)**: [e.g., 1 hour, 15 minutes, zero]
+- **Single Points of Failure**: [List identified SPOFs and mitigation strategies]
+- **Disaster Recovery**: [Backup region, restore procedures, DR testing frequency]
+
+### Multi-Region Details *(if Multi-Region selected)*
+
+- **Primary Region**: [Region name and rationale]
+- **Secondary Region(s)**: [Region name(s) and rationale]
+- **Failover Strategy**: [Automatic/Manual, DNS-based, load balancer, etc.]
+- **Expected Failover Time**: [e.g., < 60 seconds, < 5 minutes]
+- **Data Consistency Model**: [ ] Strong | [ ] Eventual | [ ] Bounded Staleness ([bound])
+- **Replication Lag Tolerance**: [e.g., < 1 second, < 30 seconds, N/A for strong consistency]
+- **Conflict Resolution**: [For active-active: last-write-wins, merge, application-level, etc.]
+
+## FinOps *(mandatory)*
+
+<!--
+  ACTION REQUIRED: Cost is a primary driver of decisions (Constitution Principle II).
+  This section MUST be completed before implementation begins.
+
+  If costs cannot be estimated, document why and what information is needed.
+-->
+
+### Cost Estimate
+
+| Component | Monthly Cost | Annual Cost | Assumptions |
+|-----------|-------------|-------------|-------------|
+| [Compute] | $[X] | $[X] | [e.g., 2x m5.large, 730 hrs/mo] |
+| [Storage] | $[X] | $[X] | [e.g., 100GB S3, 1TB data transfer] |
+| [Database] | $[X] | $[X] | [e.g., RDS db.r5.large, Multi-AZ] |
+| [Network] | $[X] | $[X] | [e.g., 500GB egress, NAT gateway] |
+| [Other] | $[X] | $[X] | [e.g., API calls, third-party services] |
+| **Total** | **$[X]** | **$[X]** | |
+
+**Pricing Model Used**: [On-demand / Reserved / Spot / Savings Plans - with commitment period if applicable]
+
+### Cost Drivers
+
+1. **Primary Driver**: [What factor most impacts cost - e.g., "Data transfer costs scale with user growth"]
+2. **Secondary Driver**: [Next most significant factor]
+3. **Variable Costs**: [What costs scale with usage vs. fixed costs]
+
+### Cost Comparison with Alternatives
+
+| Approach | Monthly Cost | Trade-offs |
+|----------|-------------|------------|
+| Chosen approach | $[X] | [Why chosen despite cost] |
+| Alternative 1 | $[X] | [Why not chosen - e.g., "30% cheaper but doesn't meet latency requirements"] |
+| Alternative 2 | $[X] | [Why not chosen] |
+
+### Cost Optimization Opportunities
+
+- [ ] [Optimization 1 - e.g., "Use Reserved Instances after validating usage patterns - potential 40% savings"]
+- [ ] [Optimization 2 - e.g., "Implement S3 lifecycle policies for cold storage"]
+- [ ] [Optimization 3 - e.g., "Right-size instances after load testing"]
+
+### Cost Monitoring & Alerts
+
+- **Budget Ceiling**: $[X]/month - [What happens if exceeded: alert, auto-scale down, manual review]
+- **Alert Thresholds**: [e.g., 50%, 75%, 90% of budget]
+- **Cost Allocation Tags**: [Tags used for cost tracking - e.g., project, team, environment]
+- **Review Cadence**: [How often costs are reviewed - e.g., weekly, monthly]
+
+### Break-Even Analysis
+
+- **Current Scale**: [X users/requests] = $[X]/month
+- **Projected Scale**: [Y users/requests] = $[Y]/month (at [timeframe])
+- **Cost Per Unit**: $[X] per [user/request/transaction]
+- **Sustainability Threshold**: [At what scale does this become unsustainable? What's the mitigation plan?]

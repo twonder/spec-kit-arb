@@ -2,10 +2,10 @@
 description: Create or update the feature specification from a natural language feature description.
 handoffs: 
   - label: Build Technical Plan
-    agent: speckit.plan
+    agent: arb.plan
     prompt: Create a plan for the spec. I am building with...
   - label: Clarify Spec Requirements
-    agent: speckit.clarify
+    agent: arb.clarify
     prompt: Clarify specification requirements
     send: true
 scripts:
@@ -23,7 +23,7 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 ## Outline
 
-The text the user typed after `/speckit.specify` in the triggering message **is** the feature description. Assume you always have it available in this conversation even if `{ARGS}` appears literally below. Do not ask the user to repeat it unless they provided an empty command.
+The text the user typed after `/arb.specify` in the triggering message **is** the feature description. Assume you always have it available in this conversation even if `{ARGS}` appears literally below. Do not ask the user to repeat it unless they provided an empty command.
 
 Given that feature description, do this:
 
@@ -97,7 +97,40 @@ Given that feature description, do this:
        Include both quantitative metrics (time, performance, volume) and qualitative measures (user satisfaction, task completion)
        Each criterion must be verifiable without implementation details
     7. Identify Key Entities (if data involved)
-    8. Return: SUCCESS (spec ready for planning)
+    8. **ADR Review and Creation** (MANDATORY):
+       a. List the ADR directory: `ls -la adrs/` (or configured adrDir)
+       b. Read ALL existing ADRs to understand current architectural decisions
+       c. For each ADR, determine if it applies to this feature:
+          - If applicable: Add to "Referenced ADRs" section with explanation of relevance
+          - If conflicts exist: Note in "ADR Compliance Notes" section
+       d. Identify if this spec proposes NEW technologies, patterns, or architectural decisions:
+          - New programming language, framework, or library not previously used
+          - New integration pattern (message queue, event sourcing, etc.)
+          - New data storage approach
+          - New authentication/authorization mechanism
+          - Significant deviation from established patterns
+       e. For each new decision identified:
+          - Add to "New ADRs Required" section as TODO
+          - Include: decision topic, why it needs an ADR, alternatives to consider
+       f. If no ADRs exist yet, note this and still identify decisions that SHOULD have ADRs
+    9. **Availability Architecture** (MANDATORY for infrastructure/services):
+       a. Determine if this feature involves infrastructure or services
+       b. If yes, explicitly declare the availability approach:
+          - Single Region: State region, RTO/RPO, SPOFs, DR approach
+          - Multi-Region Active-Active: All regions serve traffic, bidirectional replication
+          - Multi-Region Active-Passive: Primary serves traffic, secondary on standby
+       c. Document rationale for the choice (cost, latency, compliance, complexity)
+       d. If multi-region, specify: failover strategy, consistency model, replication lag tolerance
+       e. Cross-reference with FinOps section for cost implications
+    10. **FinOps Section** (MANDATORY):
+        a. Estimate costs for the proposed solution (compute, storage, network, etc.)
+        b. Identify primary cost drivers and what scales with usage
+        c. Compare costs against alternatives considered
+        d. Document cost optimization opportunities
+        e. Define budget ceiling, alert thresholds, and monitoring approach
+        f. Calculate cost per unit (user/request/transaction)
+        g. Note: If exact costs unknown, provide ranges and document assumptions
+    11. Return: SUCCESS (spec ready for planning)
 
 5. Write the specification to SPEC_FILE using the template structure, replacing placeholders with concrete details derived from the feature description (arguments) while preserving section order and headings.
 
@@ -113,19 +146,44 @@ Given that feature description, do this:
       **Feature**: [Link to spec.md]
       
       ## Content Quality
-      
+
       - [ ] No implementation details (languages, frameworks, APIs)
       - [ ] Focused on user value and business needs
       - [ ] Written for non-technical stakeholders
       - [ ] All mandatory sections completed
-      
+
       ## Requirement Completeness
-      
+
       - [ ] No [NEEDS CLARIFICATION] markers remain
       - [ ] Requirements are testable and unambiguous
       - [ ] Success criteria are measurable
       - [ ] Success criteria are technology-agnostic (no implementation details)
       - [ ] All acceptance scenarios are defined
+
+      ## ADR Compliance (Constitution Principle I)
+
+      - [ ] All applicable existing ADRs are referenced
+      - [ ] New ADRs identified for new technologies/patterns
+      - [ ] ADR compliance notes completed
+      - [ ] No unresolved ADR conflicts
+
+      ## Availability Architecture (Constitution Principle III)
+
+      - [ ] Availability approach explicitly declared (Single/Multi-Region)
+      - [ ] If Multi-Region: Active-Active or Active-Passive specified
+      - [ ] Region selection rationale documented
+      - [ ] RTO/RPO defined
+      - [ ] Failover strategy documented (if applicable)
+      - [ ] Or marked N/A with justification (no infrastructure impact)
+
+      ## FinOps (Constitution Principle II)
+
+      - [ ] Cost estimates provided (monthly/annual)
+      - [ ] Cost drivers identified
+      - [ ] Cost comparison with alternatives included
+      - [ ] Cost optimization opportunities documented
+      - [ ] Budget ceiling and alert thresholds defined
+      - [ ] Cost monitoring approach specified
       - [ ] Edge cases are identified
       - [ ] Scope is clearly bounded
       - [ ] Dependencies and assumptions identified
@@ -139,7 +197,7 @@ Given that feature description, do this:
       
       ## Notes
       
-      - Items marked incomplete require spec updates before `/speckit.clarify` or `/speckit.plan`
+      - Items marked incomplete require spec updates before `/arb.clarify` or `/arb.plan`
       ```
 
    b. **Run Validation Check**: Review the spec against each checklist item:
@@ -193,7 +251,7 @@ Given that feature description, do this:
 
    d. **Update Checklist**: After each validation iteration, update the checklist file with current pass/fail status
 
-7. Report completion with branch name, spec file path, checklist results, and readiness for the next phase (`/speckit.clarify` or `/speckit.plan`).
+7. Report completion with branch name, spec file path, checklist results, and readiness for the next phase (`/arb.clarify` or `/arb.plan`).
 
 **NOTE:** The script creates and checks out the new branch and initializes the spec file before writing.
 
@@ -205,6 +263,34 @@ Given that feature description, do this:
 - Avoid HOW to implement (no tech stack, APIs, code structure).
 - Written for business stakeholders, not developers.
 - DO NOT create any checklists that are embedded in the spec. That will be a separate command.
+
+### ADR Guidelines
+
+Architecture Decision Records are MANDATORY for specifications. Every spec must:
+
+1. **Reference existing ADRs**: Read all ADRs in the `adrs/` directory and link any that apply
+2. **Create new ADRs when needed**: If the spec proposes something new (technology, pattern, approach), create an ADR first
+3. **Document compliance**: Note any tensions or full compliance with existing decisions
+
+**When to create a new ADR**:
+- Proposing a new technology not currently used in the project
+- Introducing a new architectural pattern (event sourcing, CQRS, etc.)
+- Choosing between competing approaches with significant trade-offs
+- Deviating from an established convention
+
+**To create a new ADR**, use:
+```bash
+./scripts/bash/create-adr.sh "Decision title"
+# or PowerShell:
+./scripts/powershell/create-adr.ps1 "Decision title"
+```
+
+**ADR content should include**:
+- Context and problem statement
+- Decision drivers (requirements, constraints)
+- Considered options with pros/cons
+- Decision outcome and rationale
+- Consequences (positive, negative, neutral)
 
 ### Section Requirements
 

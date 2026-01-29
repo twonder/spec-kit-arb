@@ -16,7 +16,7 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 ## Outline
 
-The text the user typed after `/speckit.adr` in the triggering message **is** the ADR title or decision description. Assume you always have it available in this conversation even if `{ARGS}` appears literally below. Do not ask the user to repeat it unless they provided an empty command.
+The text the user typed after `/arb.adr` in the triggering message **is** the ADR title or decision description. Assume you always have it available in this conversation even if `{ARGS}` appears literally below. Do not ask the user to repeat it unless they provided an empty command.
 
 Given that decision description, do this:
 
@@ -58,7 +58,21 @@ Given that decision description, do this:
       List positive, negative, and neutral outcomes
    7. Document Alternatives Considered
       Include at least 2 alternatives with pros/cons and why they weren't chosen
-   8. Return: SUCCESS (ADR ready for review)
+   8. **Availability Architecture** (if applicable):
+      a. Determine if this decision involves infrastructure or services
+      b. If yes, explicitly declare:
+         - Single Region vs Multi-Region
+         - If Multi-Region: Active-Active or Active-Passive
+         - Region selection and rationale
+         - Failover strategy and consistency model
+      c. If not applicable, mark as "N/A - No availability implications"
+   9. **FinOps Impact** (MANDATORY - Constitution Principle II):
+      a. Compare costs of chosen approach vs alternatives
+      b. Identify primary cost drivers
+      c. Document variable vs fixed costs
+      d. Note any hidden costs (training, migration, operational overhead)
+      e. Justify why the cost is acceptable (especially if not cheapest option)
+   10. Return: SUCCESS (ADR ready for review)
 
 5. Write the ADR to ADR_FILE using the template structure, replacing placeholders with concrete details derived from the decision description.
 
@@ -70,6 +84,9 @@ Given that decision description, do this:
       - At least 2 alternatives are documented
       - Consequences cover positive, negative, and neutral outcomes
       - No [NEEDS CLARIFICATION] markers remain
+      - Availability architecture declared (or marked N/A with justification)
+      - FinOps impact section completed with cost comparison
+      - Cost rationale provided (especially if not cheapest option)
 
    b. **Handle Validation Results**:
       - If items fail, update the ADR to address issues
