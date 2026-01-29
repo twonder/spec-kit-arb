@@ -1,12 +1,8 @@
 #!/usr/bin/env pwsh
 # Create a new feature
 
-# Helper function to check if numbered prefixes should be used
-function Use-NumberedPrefix {
-    $value = $env:SPECIFY_USE_NUMBERED_PREFIX
-    if ($null -eq $value -or $value -eq "" -or $value -eq "true") { return $true }
-    return $false
-}
+# Source common functions
+. "$PSScriptRoot/common.ps1"
 
 [CmdletBinding()]
 param(
@@ -157,7 +153,9 @@ try {
 
 Set-Location $repoRoot
 
-$specsDirName = if ($env:SPECIFY_SPECS_DIR) { $env:SPECIFY_SPECS_DIR } else { "specs" }
+# Load configuration
+$config = Get-SpecifyConfig -RepoRoot $repoRoot
+$specsDirName = $config.specsDir
 $specsDir = Join-Path $repoRoot $specsDirName
 New-Item -ItemType Directory -Path $specsDir -Force | Out-Null
 

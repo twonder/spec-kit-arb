@@ -1,0 +1,5 @@
+{
+  "specsDir": "specs",
+  "adrDir": "adrs",
+  "useNumberedPrefix": true
+}

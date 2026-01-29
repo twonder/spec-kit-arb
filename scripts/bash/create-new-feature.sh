@@ -2,8 +2,9 @@
 
 set -e
 
-# Helper function to check if numbered prefixes should be used
-use_numbered_prefix() { [[ "${SPECIFY_USE_NUMBERED_PREFIX:-true}" == "true" ]]; }
+# Source common functions
+SCRIPT_DIR="$(CDPATH="" cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/common.sh"
 
 JSON_MODE=false
 SHORT_NAME=""
@@ -161,8 +162,6 @@ clean_branch_name() {
 # Resolve repository root. Prefer git information when available, but fall back
 # to searching for repository markers so the workflow still functions in repositories that
 # were initialised with --no-git.
-SCRIPT_DIR="$(CDPATH="" cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
 if git rev-parse --show-toplevel >/dev/null 2>&1; then
     REPO_ROOT=$(git rev-parse --show-toplevel)
     HAS_GIT=true
@@ -177,7 +176,10 @@ fi
 
 cd "$REPO_ROOT"
 
-SPECS_DIR="$REPO_ROOT/${SPECIFY_SPECS_DIR:-specs}"
+# Load configuration
+load_config "$REPO_ROOT"
+
+SPECS_DIR="$REPO_ROOT/$(get_specs_dir)"
 mkdir -p "$SPECS_DIR"
 
 # Function to generate branch name with stop word filtering and length filtering

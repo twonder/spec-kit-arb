@@ -2,6 +2,10 @@
 
 set -e
 
+# Source common functions
+SCRIPT_DIR="$(CDPATH="" cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/common.sh"
+
 JSON_MODE=false
 ADR_TITLE=""
 ARGS=()
@@ -118,8 +122,6 @@ generate_slug() {
 }
 
 # Resolve repository root
-SCRIPT_DIR="$(CDPATH="" cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
 if git rev-parse --show-toplevel >/dev/null 2>&1; then
     REPO_ROOT=$(git rev-parse --show-toplevel)
 else
@@ -132,8 +134,11 @@ fi
 
 cd "$REPO_ROOT"
 
-# Get ADR directory from environment or use default
-ADR_DIR="$REPO_ROOT/${SPECIFY_ADR_DIR:-adrs}"
+# Load configuration
+load_config "$REPO_ROOT"
+
+# Get ADR directory from config
+ADR_DIR="$REPO_ROOT/$(get_adr_dir)"
 mkdir -p "$ADR_DIR"
 
 # Get next ADR number

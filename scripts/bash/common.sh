@@ -1,17 +1,89 @@
 #!/usr/bin/env bash
 # Common functions and variables for all scripts
 
-# Configuration helper functions
-# These allow customization via environment variables with sensible defaults
+# Configuration variables (set by load_config)
+_SPECIFY_SPECS_DIR=""
+_SPECIFY_ADR_DIR=""
+_SPECIFY_USE_NUMBERED_PREFIX=""
+_SPECIFY_CONFIG_LOADED=false
 
-# Get the specs directory (configurable via SPECIFY_SPECS_DIR)
-get_specs_dir() { echo "${SPECIFY_SPECS_DIR:-specs}"; }
+# Load configuration from .specify/config.json
+# Priority: 1) config.json, 2) environment variables, 3) defaults
+load_config() {
+    local repo_root="$1"
 
-# Get the ADR directory (configurable via SPECIFY_ADR_DIR)
-get_adr_dir() { echo "${SPECIFY_ADR_DIR:-adrs}"; }
+    # Already loaded, skip
+    if [[ "$_SPECIFY_CONFIG_LOADED" == "true" ]]; then
+        return
+    fi
 
-# Check if numbered prefixes should be used (configurable via SPECIFY_USE_NUMBERED_PREFIX)
-use_numbered_prefix() { [[ "${SPECIFY_USE_NUMBERED_PREFIX:-true}" == "true" ]]; }
+    local config_file="$repo_root/.specify/config.json"
+
+    if [[ -f "$config_file" ]]; then
+        if command -v jq &>/dev/null; then
+            # Use jq for reliable parsing
+            _SPECIFY_SPECS_DIR=$(jq -r '.specsDir // empty' "$config_file" 2>/dev/null)
+            _SPECIFY_ADR_DIR=$(jq -r '.adrDir // empty' "$config_file" 2>/dev/null)
+            local use_prefix=$(jq -r '.useNumberedPrefix // empty' "$config_file" 2>/dev/null)
+            if [[ -n "$use_prefix" ]]; then
+                _SPECIFY_USE_NUMBERED_PREFIX="$use_prefix"
+            fi
+        else
+            # Fallback: simple grep/sed for basic JSON
+            _SPECIFY_SPECS_DIR=$(grep -o '"specsDir"[[:space:]]*:[[:space:]]*"[^"]*"' "$config_file" 2>/dev/null | sed 's/.*:[[:space:]]*"\([^"]*\)"/\1/' || true)
+            _SPECIFY_ADR_DIR=$(grep -o '"adrDir"[[:space:]]*:[[:space:]]*"[^"]*"' "$config_file" 2>/dev/null | sed 's/.*:[[:space:]]*"\([^"]*\)"/\1/' || true)
+            local use_prefix=$(grep -o '"useNumberedPrefix"[[:space:]]*:[[:space:]]*[a-z]*' "$config_file" 2>/dev/null | sed 's/.*:[[:space:]]*//' || true)
+            if [[ -n "$use_prefix" ]]; then
+                _SPECIFY_USE_NUMBERED_PREFIX="$use_prefix"
+            fi
+        fi
+    fi
+
+    # Fall back to environment variables if config values are empty
+    _SPECIFY_SPECS_DIR="${_SPECIFY_SPECS_DIR:-${SPECIFY_SPECS_DIR:-}}"
+    _SPECIFY_ADR_DIR="${_SPECIFY_ADR_DIR:-${SPECIFY_ADR_DIR:-}}"
+    _SPECIFY_USE_NUMBERED_PREFIX="${_SPECIFY_USE_NUMBERED_PREFIX:-${SPECIFY_USE_NUMBERED_PREFIX:-}}"
+
+    # Apply defaults if still empty
+    _SPECIFY_SPECS_DIR="${_SPECIFY_SPECS_DIR:-specs}"
+    _SPECIFY_ADR_DIR="${_SPECIFY_ADR_DIR:-adrs}"
+    _SPECIFY_USE_NUMBERED_PREFIX="${_SPECIFY_USE_NUMBERED_PREFIX:-true}"
+
+    _SPECIFY_CONFIG_LOADED=true
+}
+
+# Get the specs directory
+get_specs_dir() {
+    # Ensure config is loaded
+    if [[ "$_SPECIFY_CONFIG_LOADED" != "true" ]]; then
+        local repo_root
+        repo_root=$(get_repo_root)
+        load_config "$repo_root"
+    fi
+    echo "$_SPECIFY_SPECS_DIR"
+}
+
+# Get the ADR directory
+get_adr_dir() {
+    # Ensure config is loaded
+    if [[ "$_SPECIFY_CONFIG_LOADED" != "true" ]]; then
+        local repo_root
+        repo_root=$(get_repo_root)
+        load_config "$repo_root"
+    fi
+    echo "$_SPECIFY_ADR_DIR"
+}
+
+# Check if numbered prefixes should be used
+use_numbered_prefix() {
+    # Ensure config is loaded
+    if [[ "$_SPECIFY_CONFIG_LOADED" != "true" ]]; then
+        local repo_root
+        repo_root=$(get_repo_root)
+        load_config "$repo_root"
+    fi
+    [[ "$_SPECIFY_USE_NUMBERED_PREFIX" == "true" ]]
+}
 
 # Get repository root, with fallback for non-git repositories
 get_repo_root() {

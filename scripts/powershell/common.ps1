@@ -1,23 +1,82 @@
 #!/usr/bin/env pwsh
 # Common PowerShell functions analogous to common.sh
 
-# Configuration helper functions
-# These allow customization via environment variables with sensible defaults
+# Script-level configuration cache
+$script:SpecifyConfig = $null
+$script:SpecifyConfigLoaded = $false
+
+# Load configuration from .specify/config.json
+# Priority: 1) config.json, 2) environment variables, 3) defaults
+function Get-SpecifyConfig {
+    param([string]$RepoRoot)
+
+    # Return cached config if already loaded
+    if ($script:SpecifyConfigLoaded -and $script:SpecifyConfig) {
+        return $script:SpecifyConfig
+    }
+
+    # Initialize with defaults
+    $config = @{
+        specsDir = "specs"
+        adrDir = "adrs"
+        useNumberedPrefix = $true
+    }
+
+    # Try to load from config file
+    if ($RepoRoot) {
+        $configFile = Join-Path $RepoRoot ".specify/config.json"
+        if (Test-Path $configFile) {
+            try {
+                $jsonConfig = Get-Content $configFile -Raw | ConvertFrom-Json
+                if ($jsonConfig.specsDir) { $config.specsDir = $jsonConfig.specsDir }
+                if ($jsonConfig.adrDir) { $config.adrDir = $jsonConfig.adrDir }
+                if ($null -ne $jsonConfig.useNumberedPrefix) { $config.useNumberedPrefix = $jsonConfig.useNumberedPrefix }
+            } catch {
+                Write-Verbose "Could not parse config file: $_"
+            }
+        }
+    }
+
+    # Fall back to environment variables if config values are still defaults
+    if ($env:SPECIFY_SPECS_DIR -and $config.specsDir -eq "specs") {
+        $config.specsDir = $env:SPECIFY_SPECS_DIR
+    }
+    if ($env:SPECIFY_ADR_DIR -and $config.adrDir -eq "adrs") {
+        $config.adrDir = $env:SPECIFY_ADR_DIR
+    }
+    if ($env:SPECIFY_USE_NUMBERED_PREFIX) {
+        $config.useNumberedPrefix = $env:SPECIFY_USE_NUMBERED_PREFIX -eq "true"
+    }
+
+    # Cache the config
+    $script:SpecifyConfig = $config
+    $script:SpecifyConfigLoaded = $true
+
+    return $config
+}
+
+# Reset config cache (useful for testing)
+function Reset-SpecifyConfig {
+    $script:SpecifyConfig = $null
+    $script:SpecifyConfigLoaded = $false
+}
 
 function Get-SpecsDir {
-    if ($env:SPECIFY_SPECS_DIR) { return $env:SPECIFY_SPECS_DIR }
-    return "specs"
+    $repoRoot = Get-RepoRoot
+    $config = Get-SpecifyConfig -RepoRoot $repoRoot
+    return $config.specsDir
 }
 
 function Get-AdrDir {
-    if ($env:SPECIFY_ADR_DIR) { return $env:SPECIFY_ADR_DIR }
-    return "adrs"
+    $repoRoot = Get-RepoRoot
+    $config = Get-SpecifyConfig -RepoRoot $repoRoot
+    return $config.adrDir
 }
 
 function Use-NumberedPrefix {
-    $value = $env:SPECIFY_USE_NUMBERED_PREFIX
-    if ($null -eq $value -or $value -eq "" -or $value -eq "true") { return $true }
-    return $false
+    $repoRoot = Get-RepoRoot
+    $config = Get-SpecifyConfig -RepoRoot $repoRoot
+    return $config.useNumberedPrefix
 }
 
 function Get-RepoRoot {
