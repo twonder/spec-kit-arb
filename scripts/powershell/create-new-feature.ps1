@@ -1,5 +1,13 @@
 #!/usr/bin/env pwsh
 # Create a new feature
+
+# Helper function to check if numbered prefixes should be used
+function Use-NumberedPrefix {
+    $value = $env:SPECIFY_USE_NUMBERED_PREFIX
+    if ($null -eq $value -or $value -eq "" -or $value -eq "true") { return $true }
+    return $false
+}
+
 [CmdletBinding()]
 param(
     [switch]$Json,
@@ -149,7 +157,8 @@ try {
 
 Set-Location $repoRoot
 
-$specsDir = Join-Path $repoRoot 'specs'
+$specsDirName = if ($env:SPECIFY_SPECS_DIR) { $env:SPECIFY_SPECS_DIR } else { "specs" }
+$specsDir = Join-Path $repoRoot $specsDirName
 New-Item -ItemType Directory -Path $specsDir -Force | Out-Null
 
 # Function to generate branch name with stop word filtering and length filtering
@@ -206,36 +215,49 @@ if ($ShortName) {
     $branchSuffix = Get-BranchName -Description $featureDesc
 }
 
-# Determine branch number
-if ($Number -eq 0) {
-    if ($hasGit) {
-        # Check existing branches on remotes
-        $Number = Get-NextBranchNumber -SpecsDir $specsDir
-    } else {
-        # Fall back to local directory check
-        $Number = (Get-HighestNumberFromSpecs -SpecsDir $specsDir) + 1
+# Determine branch number and name based on numbered prefix mode
+if (Use-NumberedPrefix) {
+    # Numbered prefix mode
+    if ($Number -eq 0) {
+        if ($hasGit) {
+            # Check existing branches on remotes
+            $Number = Get-NextBranchNumber -SpecsDir $specsDir
+        } else {
+            # Fall back to local directory check
+            $Number = (Get-HighestNumberFromSpecs -SpecsDir $specsDir) + 1
+        }
     }
-}
 
-$featureNum = ('{0:000}' -f $Number)
-$branchName = "$featureNum-$branchSuffix"
+    $featureNum = ('{0:000}' -f $Number)
+    $branchName = "$featureNum-$branchSuffix"
+} else {
+    # Non-numbered mode - use short name directly
+    $featureNum = ""
+    $branchName = $branchSuffix
+}
 
 # GitHub enforces a 244-byte limit on branch names
 # Validate and truncate if necessary
 $maxBranchLength = 244
 if ($branchName.Length -gt $maxBranchLength) {
-    # Calculate how much we need to trim from suffix
-    # Account for: feature number (3) + hyphen (1) = 4 chars
-    $maxSuffixLength = $maxBranchLength - 4
-    
-    # Truncate suffix
-    $truncatedSuffix = $branchSuffix.Substring(0, [Math]::Min($branchSuffix.Length, $maxSuffixLength))
-    # Remove trailing hyphen if truncation created one
-    $truncatedSuffix = $truncatedSuffix -replace '-$', ''
-    
     $originalBranchName = $branchName
-    $branchName = "$featureNum-$truncatedSuffix"
-    
+
+    if (Use-NumberedPrefix) {
+        # Calculate how much we need to trim from suffix
+        # Account for: feature number (3) + hyphen (1) = 4 chars
+        $maxSuffixLength = $maxBranchLength - 4
+
+        # Truncate suffix
+        $truncatedSuffix = $branchSuffix.Substring(0, [Math]::Min($branchSuffix.Length, $maxSuffixLength))
+        # Remove trailing hyphen if truncation created one
+        $truncatedSuffix = $truncatedSuffix -replace '-$', ''
+
+        $branchName = "$featureNum-$truncatedSuffix"
+    } else {
+        # Non-numbered mode: just truncate the suffix directly
+        $branchName = $branchSuffix.Substring(0, [Math]::Min($branchSuffix.Length, $maxBranchLength)) -replace '-$', ''
+    }
+
     Write-Warning "[specify] Branch name exceeded GitHub's 244-byte limit"
     Write-Warning "[specify] Original: $originalBranchName ($($originalBranchName.Length) bytes)"
     Write-Warning "[specify] Truncated to: $branchName ($($branchName.Length) bytes)"

@@ -1,6 +1,18 @@
 #!/usr/bin/env bash
 # Common functions and variables for all scripts
 
+# Configuration helper functions
+# These allow customization via environment variables with sensible defaults
+
+# Get the specs directory (configurable via SPECIFY_SPECS_DIR)
+get_specs_dir() { echo "${SPECIFY_SPECS_DIR:-specs}"; }
+
+# Get the ADR directory (configurable via SPECIFY_ADR_DIR)
+get_adr_dir() { echo "${SPECIFY_ADR_DIR:-adrs}"; }
+
+# Check if numbered prefixes should be used (configurable via SPECIFY_USE_NUMBERED_PREFIX)
+use_numbered_prefix() { [[ "${SPECIFY_USE_NUMBERED_PREFIX:-true}" == "true" ]]; }
+
 # Get repository root, with fallback for non-git repositories
 get_repo_root() {
     if git rev-parse --show-toplevel >/dev/null 2>&1; then
@@ -28,20 +40,31 @@ get_current_branch() {
 
     # For non-git repos, try to find the latest feature directory
     local repo_root=$(get_repo_root)
-    local specs_dir="$repo_root/specs"
+    local specs_dir="$repo_root/$(get_specs_dir)"
 
     if [[ -d "$specs_dir" ]]; then
         local latest_feature=""
         local highest=0
+        local latest_mtime=0
 
         for dir in "$specs_dir"/*; do
             if [[ -d "$dir" ]]; then
                 local dirname=$(basename "$dir")
-                if [[ "$dirname" =~ ^([0-9]{3})- ]]; then
-                    local number=${BASH_REMATCH[1]}
-                    number=$((10#$number))
-                    if [[ "$number" -gt "$highest" ]]; then
-                        highest=$number
+                if use_numbered_prefix; then
+                    # Numbered prefix mode: find highest number
+                    if [[ "$dirname" =~ ^([0-9]{3})- ]]; then
+                        local number=${BASH_REMATCH[1]}
+                        number=$((10#$number))
+                        if [[ "$number" -gt "$highest" ]]; then
+                            highest=$number
+                            latest_feature=$dirname
+                        fi
+                    fi
+                else
+                    # Non-numbered mode: find most recently modified
+                    local mtime=$(stat -f %m "$dir" 2>/dev/null || stat -c %Y "$dir" 2>/dev/null || echo "0")
+                    if [[ "$mtime" -gt "$latest_mtime" ]]; then
+                        latest_mtime=$mtime
                         latest_feature=$dirname
                     fi
                 fi
@@ -72,6 +95,11 @@ check_feature_branch() {
         return 0
     fi
 
+    # Skip numbered prefix validation when not using numbered prefixes
+    if ! use_numbered_prefix; then
+        return 0
+    fi
+
     if [[ ! "$branch" =~ ^[0-9]{3}- ]]; then
         echo "ERROR: Not on a feature branch. Current branch: $branch" >&2
         echo "Feature branches should be named like: 001-feature-name" >&2
@@ -81,14 +109,20 @@ check_feature_branch() {
     return 0
 }
 
-get_feature_dir() { echo "$1/specs/$2"; }
+get_feature_dir() { echo "$1/$(get_specs_dir)/$2"; }
 
 # Find feature directory by numeric prefix instead of exact branch match
 # This allows multiple branches to work on the same spec (e.g., 004-fix-bug, 004-add-feature)
 find_feature_dir_by_prefix() {
     local repo_root="$1"
     local branch_name="$2"
-    local specs_dir="$repo_root/specs"
+    local specs_dir="$repo_root/$(get_specs_dir)"
+
+    # In non-numbered mode, use exact match
+    if ! use_numbered_prefix; then
+        echo "$specs_dir/$branch_name"
+        return
+    fi
 
     # Extract numeric prefix from branch (e.g., "004" from "004-whatever")
     if [[ ! "$branch_name" =~ ^([0-9]{3})- ]]; then

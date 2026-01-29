@@ -2,6 +2,9 @@
 
 set -e
 
+# Helper function to check if numbered prefixes should be used
+use_numbered_prefix() { [[ "${SPECIFY_USE_NUMBERED_PREFIX:-true}" == "true" ]]; }
+
 JSON_MODE=false
 SHORT_NAME=""
 BRANCH_NUMBER=""
@@ -174,7 +177,7 @@ fi
 
 cd "$REPO_ROOT"
 
-SPECS_DIR="$REPO_ROOT/specs"
+SPECS_DIR="$REPO_ROOT/${SPECIFY_SPECS_DIR:-specs}"
 mkdir -p "$SPECS_DIR"
 
 # Function to generate branch name with stop word filtering and length filtering
@@ -234,38 +237,51 @@ else
     BRANCH_SUFFIX=$(generate_branch_name "$FEATURE_DESCRIPTION")
 fi
 
-# Determine branch number
-if [ -z "$BRANCH_NUMBER" ]; then
-    if [ "$HAS_GIT" = true ]; then
-        # Check existing branches on remotes
-        BRANCH_NUMBER=$(check_existing_branches "$SPECS_DIR")
-    else
-        # Fall back to local directory check
-        HIGHEST=$(get_highest_from_specs "$SPECS_DIR")
-        BRANCH_NUMBER=$((HIGHEST + 1))
+# Determine branch number and name based on numbered prefix mode
+if use_numbered_prefix; then
+    # Numbered prefix mode
+    if [ -z "$BRANCH_NUMBER" ]; then
+        if [ "$HAS_GIT" = true ]; then
+            # Check existing branches on remotes
+            BRANCH_NUMBER=$(check_existing_branches "$SPECS_DIR")
+        else
+            # Fall back to local directory check
+            HIGHEST=$(get_highest_from_specs "$SPECS_DIR")
+            BRANCH_NUMBER=$((HIGHEST + 1))
+        fi
     fi
-fi
 
-# Force base-10 interpretation to prevent octal conversion (e.g., 010 → 8 in octal, but should be 10 in decimal)
-FEATURE_NUM=$(printf "%03d" "$((10#$BRANCH_NUMBER))")
-BRANCH_NAME="${FEATURE_NUM}-${BRANCH_SUFFIX}"
+    # Force base-10 interpretation to prevent octal conversion (e.g., 010 → 8 in octal, but should be 10 in decimal)
+    FEATURE_NUM=$(printf "%03d" "$((10#$BRANCH_NUMBER))")
+    BRANCH_NAME="${FEATURE_NUM}-${BRANCH_SUFFIX}"
+else
+    # Non-numbered mode - use short name directly
+    FEATURE_NUM=""
+    BRANCH_NAME="${BRANCH_SUFFIX}"
+fi
 
 # GitHub enforces a 244-byte limit on branch names
 # Validate and truncate if necessary
 MAX_BRANCH_LENGTH=244
 if [ ${#BRANCH_NAME} -gt $MAX_BRANCH_LENGTH ]; then
-    # Calculate how much we need to trim from suffix
-    # Account for: feature number (3) + hyphen (1) = 4 chars
-    MAX_SUFFIX_LENGTH=$((MAX_BRANCH_LENGTH - 4))
-    
-    # Truncate suffix at word boundary if possible
-    TRUNCATED_SUFFIX=$(echo "$BRANCH_SUFFIX" | cut -c1-$MAX_SUFFIX_LENGTH)
-    # Remove trailing hyphen if truncation created one
-    TRUNCATED_SUFFIX=$(echo "$TRUNCATED_SUFFIX" | sed 's/-$//')
-    
-    ORIGINAL_BRANCH_NAME="$BRANCH_NAME"
-    BRANCH_NAME="${FEATURE_NUM}-${TRUNCATED_SUFFIX}"
-    
+    if use_numbered_prefix; then
+        # Calculate how much we need to trim from suffix
+        # Account for: feature number (3) + hyphen (1) = 4 chars
+        MAX_SUFFIX_LENGTH=$((MAX_BRANCH_LENGTH - 4))
+
+        # Truncate suffix at word boundary if possible
+        TRUNCATED_SUFFIX=$(echo "$BRANCH_SUFFIX" | cut -c1-$MAX_SUFFIX_LENGTH)
+        # Remove trailing hyphen if truncation created one
+        TRUNCATED_SUFFIX=$(echo "$TRUNCATED_SUFFIX" | sed 's/-$//')
+
+        ORIGINAL_BRANCH_NAME="$BRANCH_NAME"
+        BRANCH_NAME="${FEATURE_NUM}-${TRUNCATED_SUFFIX}"
+    else
+        # Non-numbered mode: just truncate the suffix directly
+        ORIGINAL_BRANCH_NAME="$BRANCH_NAME"
+        BRANCH_NAME=$(echo "$BRANCH_SUFFIX" | cut -c1-$MAX_BRANCH_LENGTH | sed 's/-$//')
+    fi
+
     >&2 echo "[specify] Warning: Branch name exceeded GitHub's 244-byte limit"
     >&2 echo "[specify] Original: $ORIGINAL_BRANCH_NAME (${#ORIGINAL_BRANCH_NAME} bytes)"
     >&2 echo "[specify] Truncated to: $BRANCH_NAME (${#BRANCH_NAME} bytes)"

@@ -1,6 +1,25 @@
 #!/usr/bin/env pwsh
 # Common PowerShell functions analogous to common.sh
 
+# Configuration helper functions
+# These allow customization via environment variables with sensible defaults
+
+function Get-SpecsDir {
+    if ($env:SPECIFY_SPECS_DIR) { return $env:SPECIFY_SPECS_DIR }
+    return "specs"
+}
+
+function Get-AdrDir {
+    if ($env:SPECIFY_ADR_DIR) { return $env:SPECIFY_ADR_DIR }
+    return "adrs"
+}
+
+function Use-NumberedPrefix {
+    $value = $env:SPECIFY_USE_NUMBERED_PREFIX
+    if ($null -eq $value -or $value -eq "" -or $value -eq "true") { return $true }
+    return $false
+}
+
 function Get-RepoRoot {
     try {
         $result = git rev-parse --show-toplevel 2>$null
@@ -33,27 +52,38 @@ function Get-CurrentBranch {
     
     # For non-git repos, try to find the latest feature directory
     $repoRoot = Get-RepoRoot
-    $specsDir = Join-Path $repoRoot "specs"
-    
+    $specsDir = Join-Path $repoRoot (Get-SpecsDir)
+
     if (Test-Path $specsDir) {
         $latestFeature = ""
         $highest = 0
-        
+        $latestMtime = [DateTime]::MinValue
+
         Get-ChildItem -Path $specsDir -Directory | ForEach-Object {
-            if ($_.Name -match '^(\d{3})-') {
-                $num = [int]$matches[1]
-                if ($num -gt $highest) {
-                    $highest = $num
+            if (Use-NumberedPrefix) {
+                # Numbered prefix mode: find highest number
+                if ($_.Name -match '^(\d{3})-') {
+                    $num = [int]$matches[1]
+                    if ($num -gt $highest) {
+                        $highest = $num
+                        $latestFeature = $_.Name
+                    }
+                }
+            } else {
+                # Non-numbered mode: find most recently modified
+                $mtime = $_.LastWriteTime
+                if ($mtime -gt $latestMtime) {
+                    $latestMtime = $mtime
                     $latestFeature = $_.Name
                 }
             }
         }
-        
+
         if ($latestFeature) {
             return $latestFeature
         }
     }
-    
+
     # Final fallback
     return "main"
 }
@@ -72,13 +102,18 @@ function Test-FeatureBranch {
         [string]$Branch,
         [bool]$HasGit = $true
     )
-    
+
     # For non-git repos, we can't enforce branch naming but still provide output
     if (-not $HasGit) {
         Write-Warning "[specify] Warning: Git repository not detected; skipped branch validation"
         return $true
     }
-    
+
+    # Skip numbered prefix validation when not using numbered prefixes
+    if (-not (Use-NumberedPrefix)) {
+        return $true
+    }
+
     if ($Branch -notmatch '^[0-9]{3}-') {
         Write-Output "ERROR: Not on a feature branch. Current branch: $Branch"
         Write-Output "Feature branches should be named like: 001-feature-name"
@@ -89,15 +124,59 @@ function Test-FeatureBranch {
 
 function Get-FeatureDir {
     param([string]$RepoRoot, [string]$Branch)
-    Join-Path $RepoRoot "specs/$Branch"
+    Join-Path $RepoRoot "$(Get-SpecsDir)/$Branch"
+}
+
+# Find feature directory by numeric prefix instead of exact branch match
+# This allows multiple branches to work on the same spec (e.g., 004-fix-bug, 004-add-feature)
+function Find-FeatureDirByPrefix {
+    param([string]$RepoRoot, [string]$BranchName)
+
+    $specsDir = Join-Path $RepoRoot (Get-SpecsDir)
+
+    # In non-numbered mode, use exact match
+    if (-not (Use-NumberedPrefix)) {
+        return Join-Path $specsDir $BranchName
+    }
+
+    # Extract numeric prefix from branch (e.g., "004" from "004-whatever")
+    if ($BranchName -notmatch '^(\d{3})-') {
+        # If branch doesn't have numeric prefix, fall back to exact match
+        return Join-Path $specsDir $BranchName
+    }
+
+    $prefix = $matches[1]
+
+    # Search for directories in specs/ that start with this prefix
+    $matchingDirs = @()
+    if (Test-Path $specsDir) {
+        Get-ChildItem -Path $specsDir -Directory | Where-Object { $_.Name -match "^$prefix-" } | ForEach-Object {
+            $matchingDirs += $_.Name
+        }
+    }
+
+    # Handle results
+    if ($matchingDirs.Count -eq 0) {
+        # No match found - return the branch name path
+        return Join-Path $specsDir $BranchName
+    } elseif ($matchingDirs.Count -eq 1) {
+        # Exactly one match
+        return Join-Path $specsDir $matchingDirs[0]
+    } else {
+        # Multiple matches
+        Write-Warning "ERROR: Multiple spec directories found with prefix '$prefix': $($matchingDirs -join ', ')"
+        Write-Warning "Please ensure only one spec directory exists per numeric prefix."
+        return Join-Path $specsDir $BranchName
+    }
 }
 
 function Get-FeaturePathsEnv {
     $repoRoot = Get-RepoRoot
     $currentBranch = Get-CurrentBranch
     $hasGit = Test-HasGit
-    $featureDir = Get-FeatureDir -RepoRoot $repoRoot -Branch $currentBranch
-    
+    # Use prefix-based lookup to support multiple branches per spec
+    $featureDir = Find-FeatureDirByPrefix -RepoRoot $repoRoot -BranchName $currentBranch
+
     [PSCustomObject]@{
         REPO_ROOT     = $repoRoot
         CURRENT_BRANCH = $currentBranch
