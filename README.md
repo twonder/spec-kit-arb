@@ -116,22 +116,6 @@ Use the **`/arb.plan`** command to provide your tech stack and architecture choi
 /arb.plan The application uses Vite with minimal number of libraries. Use vanilla HTML, CSS, and JavaScript as much as possible. Images are not uploaded anywhere and metadata is stored in a local SQLite database.
 ```
 
-### 5. Break down into tasks
-
-Use **`/arb.tasks`** to create an actionable task list from your implementation plan.
-
-```bash
-/arb.tasks
-```
-
-### 6. Execute implementation
-
-Use **`/arb.implement`** to execute all tasks and build your feature according to the plan.
-
-```bash
-/arb.implement
-```
-
 For detailed step-by-step instructions, see our [comprehensive guide](./spec-driven.md).
 
 ## 📽️ Video Overview
@@ -250,22 +234,19 @@ After running `specify init`, your AI coding agent will have access to these sla
 
 Essential commands for the Spec-Driven Development workflow:
 
-| Command                 | Description                                                              |
-| ----------------------- | ------------------------------------------------------------------------ |
+| Command             | Description                                                              |
+| ------------------- | ------------------------------------------------------------------------ |
 | `/arb.constitution` | Create or update project governing principles and development guidelines |
 | `/arb.specify`      | Define what you want to build (requirements and user stories)            |
 | `/arb.plan`         | Create technical implementation plans with your chosen tech stack        |
-| `/arb.tasks`        | Generate actionable task lists for implementation                        |
-| `/arb.implement`    | Execute all tasks to build the feature according to the plan             |
 
 #### Optional Commands
 
 Additional commands for enhanced quality and validation:
 
-| Command              | Description                                                                                                                          |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `/arb.clarify`   | Clarify underspecified areas (recommended before `/arb.plan`; formerly `/quizme`)                                                |
-| `/arb.analyze`   | Cross-artifact consistency & coverage analysis (run after `/arb.tasks`, before `/arb.implement`)                             |
+| Command          | Description                                                                                                                          |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `/arb.clarify`   | Clarify underspecified areas (recommended before `/arb.plan`; formerly `/quizme`)                                                    |
 | `/arb.checklist` | Generate custom quality checklists that validate requirements completeness, clarity, and consistency (like "unit tests for English") |
 
 ### Environment Variables
@@ -393,7 +374,7 @@ Go to the project folder and run your AI agent. In our example, we're using `cla
 
 ![Bootstrapping Claude Code environment](./media/bootstrap-claude-code.gif)
 
-You will know that things are configured correctly if you see the `/arb.constitution`, `/arb.specify`, `/arb.plan`, `/arb.tasks`, and `/arb.implement` commands available.
+You will know that things are configured correctly if you see the `/arb.constitution`, `/arb.specify`, and `/arb.plan` commands available.
 
 The first step should be establishing your project's governing principles using the `/arb.constitution` command. This helps ensure consistent decision-making throughout all subsequent development phases:
 
@@ -454,8 +435,7 @@ At this stage, your project folder contents should resemble the following:
     │      └── spec.md
     └── templates
         ├── plan-template.md
-        ├── spec-template.md
-        └── tasks-template.md
+        └── spec-template.md
 ```
 
 ### **STEP 3:** Functional specification clarification (required before planning)
@@ -523,8 +503,7 @@ The output of this step will include a number of implementation detail documents
 └── templates
     ├── CLAUDE-template.md
     ├── plan-template.md
-    ├── spec-template.md
-    └── tasks-template.md
+    └── spec-template.md
 ```
 
 Check the `research.md` document to ensure that the right tech stack is used, based on your instructions. You can ask Claude Code to refine it if any of the components stand out, or even have it check the locally-installed version of the platform/framework you want to use (e.g., .NET).
@@ -572,46 +551,6 @@ You can also ask Claude Code (if you have the [GitHub CLI](https://docs.github.c
 
 > [!NOTE]
 > Before you have the agent implement it, it's also worth prompting Claude Code to cross-check the details to see if there are any over-engineered pieces (remember - it can be over-eager). If over-engineered components or decisions exist, you can ask Claude Code to resolve them. Ensure that Claude Code follows the [constitution](base/memory/constitution.md) as the foundational piece that it must adhere to when establishing the plan.
-
-### **STEP 6:** Generate task breakdown with /arb.tasks
-
-With the implementation plan validated, you can now break down the plan into specific, actionable tasks that can be executed in the correct order. Use the `/arb.tasks` command to automatically generate a detailed task breakdown from your implementation plan:
-
-```text
-/arb.tasks
-```
-
-This step creates a `tasks.md` file in your feature specification directory that contains:
-
-- **Task breakdown organized by user story** - Each user story becomes a separate implementation phase with its own set of tasks
-- **Dependency management** - Tasks are ordered to respect dependencies between components (e.g., models before services, services before endpoints)
-- **Parallel execution markers** - Tasks that can run in parallel are marked with `[P]` to optimize development workflow
-- **File path specifications** - Each task includes the exact file paths where implementation should occur
-- **Test-driven development structure** - If tests are requested, test tasks are included and ordered to be written before implementation
-- **Checkpoint validation** - Each user story phase includes checkpoints to validate independent functionality
-
-The generated tasks.md provides a clear roadmap for the `/arb.implement` command, ensuring systematic implementation that maintains code quality and allows for incremental delivery of user stories.
-
-### **STEP 7:** Implementation
-
-Once ready, use the `/arb.implement` command to execute your implementation plan:
-
-```text
-/arb.implement
-```
-
-The `/arb.implement` command will:
-
-- Validate that all prerequisites are in place (constitution, spec, plan, and tasks)
-- Parse the task breakdown from `tasks.md`
-- Execute tasks in the correct order, respecting dependencies and parallel execution markers
-- Follow the TDD approach defined in your task plan
-- Provide progress updates and handle errors appropriately
-
-> [!IMPORTANT]
-> The AI agent will execute local CLI commands (such as `dotnet`, `npm`, etc.) - make sure you have the required tools installed on your machine.
-
-Once the implementation is complete, test the application and resolve any runtime errors that may not be visible in CLI logs (e.g., browser console errors). You can copy and paste such errors back to your AI agent for resolution.
 
 </details>
 

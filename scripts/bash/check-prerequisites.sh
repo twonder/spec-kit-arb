@@ -9,8 +9,6 @@
 #
 # OPTIONS:
 #   --json              Output in JSON format
-#   --require-tasks     Require tasks.md to exist (for implementation phase)
-#   --include-tasks     Include tasks.md in AVAILABLE_DOCS list
 #   --paths-only        Only output path variables (no validation)
 #   --help, -h          Show help message
 #
@@ -23,20 +21,12 @@ set -e
 
 # Parse command line arguments
 JSON_MODE=false
-REQUIRE_TASKS=false
-INCLUDE_TASKS=false
 PATHS_ONLY=false
 
 for arg in "$@"; do
     case "$arg" in
         --json)
             JSON_MODE=true
-            ;;
-        --require-tasks)
-            REQUIRE_TASKS=true
-            ;;
-        --include-tasks)
-            INCLUDE_TASKS=true
             ;;
         --paths-only)
             PATHS_ONLY=true
@@ -49,21 +39,16 @@ Consolidated prerequisite checking for Spec-Driven Development workflow.
 
 OPTIONS:
   --json              Output in JSON format
-  --require-tasks     Require tasks.md to exist (for implementation phase)
-  --include-tasks     Include tasks.md in AVAILABLE_DOCS list
   --paths-only        Only output path variables (no prerequisite validation)
   --help, -h          Show this help message
 
 EXAMPLES:
-  # Check task prerequisites (plan.md required)
+  # Check prerequisites (plan.md required)
   ./check-prerequisites.sh --json
-  
-  # Check implementation prerequisites (plan.md + tasks.md required)
-  ./check-prerequisites.sh --json --require-tasks --include-tasks
-  
+
   # Get feature paths only (no validation)
   ./check-prerequisites.sh --paths-only
-  
+
 EOF
             exit 0
             ;;
@@ -86,15 +71,14 @@ check_feature_branch "$CURRENT_BRANCH" "$HAS_GIT" || exit 1
 if $PATHS_ONLY; then
     if $JSON_MODE; then
         # Minimal JSON paths payload (no validation performed)
-        printf '{"REPO_ROOT":"%s","BRANCH":"%s","FEATURE_DIR":"%s","FEATURE_SPEC":"%s","IMPL_PLAN":"%s","TASKS":"%s"}\n' \
-            "$REPO_ROOT" "$CURRENT_BRANCH" "$FEATURE_DIR" "$FEATURE_SPEC" "$IMPL_PLAN" "$TASKS"
+        printf '{"REPO_ROOT":"%s","BRANCH":"%s","FEATURE_DIR":"%s","FEATURE_SPEC":"%s","IMPL_PLAN":"%s"}\n' \
+            "$REPO_ROOT" "$CURRENT_BRANCH" "$FEATURE_DIR" "$FEATURE_SPEC" "$IMPL_PLAN"
     else
         echo "REPO_ROOT: $REPO_ROOT"
         echo "BRANCH: $CURRENT_BRANCH"
         echo "FEATURE_DIR: $FEATURE_DIR"
         echo "FEATURE_SPEC: $FEATURE_SPEC"
         echo "IMPL_PLAN: $IMPL_PLAN"
-        echo "TASKS: $TASKS"
     fi
     exit 0
 fi
@@ -112,13 +96,6 @@ if [[ ! -f "$IMPL_PLAN" ]]; then
     exit 1
 fi
 
-# Check for tasks.md if required
-if $REQUIRE_TASKS && [[ ! -f "$TASKS" ]]; then
-    echo "ERROR: tasks.md not found in $FEATURE_DIR" >&2
-    echo "Run /arb.tasks first to create the task list." >&2
-    exit 1
-fi
-
 # Build list of available documents
 docs=()
 
@@ -132,11 +109,6 @@ if [[ -d "$CONTRACTS_DIR" ]] && [[ -n "$(ls -A "$CONTRACTS_DIR" 2>/dev/null)" ]]
 fi
 
 [[ -f "$QUICKSTART" ]] && docs+=("quickstart.md")
-
-# Include tasks.md if requested and it exists
-if $INCLUDE_TASKS && [[ -f "$TASKS" ]]; then
-    docs+=("tasks.md")
-fi
 
 # Output results
 if $JSON_MODE; then
@@ -159,8 +131,4 @@ else
     check_file "$DATA_MODEL" "data-model.md"
     check_dir "$CONTRACTS_DIR" "contracts/"
     check_file "$QUICKSTART" "quickstart.md"
-    
-    if $INCLUDE_TASKS; then
-        check_file "$TASKS" "tasks.md"
-    fi
 fi

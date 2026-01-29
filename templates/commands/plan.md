@@ -1,10 +1,6 @@
 ---
 description: Execute the implementation planning workflow using the plan template to generate design artifacts.
-handoffs: 
-  - label: Create Tasks
-    agent: arb.tasks
-    prompt: Break the plan into tasks
-    send: true
+handoffs:
   - label: Create Checklist
     agent: arb.checklist
     prompt: Create a checklist for the following domain...

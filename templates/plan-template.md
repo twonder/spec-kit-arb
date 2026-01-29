@@ -43,8 +43,7 @@ specs/[###-feature]/
 ├── research.md          # Phase 0 output (/arb.plan command)
 ├── data-model.md        # Phase 1 output (/arb.plan command)
 ├── quickstart.md        # Phase 1 output (/arb.plan command)
-├── contracts/           # Phase 1 output (/arb.plan command)
-└── tasks.md             # Phase 2 output (/arb.tasks command - NOT created by /arb.plan)
+└── contracts/           # Phase 1 output (/arb.plan command)
 ```
 
 ### Source Code (repository root)

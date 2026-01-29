@@ -72,7 +72,7 @@ The key is treating specifications as the source of truth, with code as the gene
 
 ## Streamlining SDD with Commands
 
-The SDD methodology is significantly enhanced through three powerful commands that automate the specification → planning → tasking workflow:
+The SDD methodology is significantly enhanced through commands that automate the specification → planning workflow:
 
 ### The `/arb.specify` Command
 
@@ -92,15 +92,6 @@ Once a feature specification exists, this command creates a comprehensive implem
 3. **Technical Translation**: Converts business requirements into technical architecture and implementation details
 4. **Detailed Documentation**: Generates supporting documents for data models, API contracts, and test scenarios
 5. **Quickstart Validation**: Produces a quickstart guide capturing key validation scenarios
-
-### The `/arb.tasks` Command
-
-After a plan is created, this command analyzes the plan and related design documents to generate an executable task list:
-
-1. **Inputs**: Reads `plan.md` (required) and, if present, `data-model.md`, `contracts/`, and `research.md`
-2. **Task Derivation**: Converts contracts, entities, and scenarios into specific tasks
-3. **Parallelization**: Marks independent tasks `[P]` and outlines safe parallel groups
-4. **Output**: Writes `tasks.md` in the feature directory, ready for execution by a Task agent
 
 ### Example: Building a Chat Feature
 
@@ -131,19 +122,15 @@ Total: ~12 hours of documentation work
 # Step 2: Generate implementation plan (5 minutes)
 /arb.plan WebSocket for real-time messaging, PostgreSQL for history, Redis for presence
 
-# Step 3: Generate executable tasks (5 minutes)
-/arb.tasks
-
 # This automatically creates:
 # - specs/003-chat-system/plan.md
 # - specs/003-chat-system/research.md (WebSocket library comparisons)
 # - specs/003-chat-system/data-model.md (Message and User schemas)
 # - specs/003-chat-system/contracts/ (WebSocket events, REST endpoints)
 # - specs/003-chat-system/quickstart.md (Key validation scenarios)
-# - specs/003-chat-system/tasks.md (Task list derived from the plan)
 ```
 
-In 15 minutes, you have:
+In 10 minutes, you have:
 
 - A complete feature specification with user stories and acceptance criteria
 - A detailed implementation plan with technology choices and rationale

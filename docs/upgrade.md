@@ -60,7 +60,7 @@ Running `specify init --here --force` will update:
 These files are **never touched** by the upgrade—the template packages don't even contain them:
 
 - ✅ **Your specifications** (`specs/001-my-feature/spec.md`, etc.) - **CONFIRMED SAFE**
-- ✅ **Your implementation plans** (`specs/001-my-feature/plan.md`, `tasks.md`, etc.) - **CONFIRMED SAFE**
+- ✅ **Your implementation plans** (`specs/001-my-feature/plan.md`, etc.) - **CONFIRMED SAFE**
 - ✅ **Your source code** - **CONFIRMED SAFE**
 - ✅ **Your git history** - **CONFIRMED SAFE**
 

@@ -63,9 +63,7 @@
 		"chat.promptFilesRecommendations": {
 			"arb.constitution": true,
 			"arb.specify": true,
-			"arb.plan": true,
-			"arb.tasks": true,
-			"arb.implement": true
+			"arb.plan": true
 		},
 		"chat.tools.terminal.autoApprove": {
 			".specify/scripts/bash/": true,

@@ -5,7 +5,7 @@ This guide will help you get started with Spec-Driven Development using Spec Kit
 > [!NOTE]
 > All automation scripts now provide both Bash (`.sh`) and PowerShell (`.ps1`) variants. The `specify` CLI auto-selects based on OS unless you pass `--script sh|ps`.
 
-## The 6-Step Process
+## The 5-Step Process
 
 > [!TIP]
 > **Context Awareness**: Spec Kit commands automatically detect the active feature based on your current Git branch (e.g., `001-feature-name`). To switch between different specifications, simply switch Git branches.
@@ -61,26 +61,6 @@ uvx --from git+https://github.com/github/spec-kit.git specify init <PROJECT_NAME
 /arb.plan The application uses Vite with minimal number of libraries. Use vanilla HTML, CSS, and JavaScript as much as possible. Images are not uploaded anywhere and metadata is stored in a local SQLite database.
 ```
 
-### Step 6: Break Down and Implement
-
-**In the chat**, use the `/arb.tasks` slash command to create an actionable task list.
-
-```markdown
-/arb.tasks
-```
-
-Optionally, validate the plan with `/arb.analyze`:
-
-```markdown
-/arb.analyze
-```
-
-Then, use the `/arb.implement` slash command to execute the plan.
-
-```markdown
-/arb.implement
-```
-
 ## Detailed Example: Building Taskify
 
 Here's a complete example of building a team productivity platform:
@@ -133,20 +113,6 @@ Be specific about your tech stack and technical requirements:
 
 ```bash
 /arb.plan We are going to generate this using .NET Aspire, using Postgres as the database. The frontend should use Blazor server with drag-and-drop task boards, real-time updates. There should be a REST API created with a projects API, tasks API, and a notifications API.
-```
-
-### Step 6: Validate and Implement
-
-Have your AI agent audit the implementation plan using `/arb.analyze`:
-
-```bash
-/arb.analyze
-```
-
-Finally, implement the solution:
-
-```bash
-/arb.implement
 ```
 
 ## Key Principles

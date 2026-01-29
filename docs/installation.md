@@ -67,8 +67,7 @@ uvx --from git+https://github.com/github/spec-kit.git specify init <project_name
 After initialization, you should see the following commands available in your AI agent:
 
 - `/arb.specify` - Create specifications
-- `/arb.plan` - Generate implementation plans  
-- `/arb.tasks` - Break down into actionable tasks
+- `/arb.plan` - Generate implementation plans
 
 The `.specify/scripts` directory will contain both `.sh` and `.ps1` scripts.
 

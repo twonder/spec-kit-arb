@@ -1222,8 +1222,6 @@ def init(
     steps_lines.append("   2.1 [cyan]/arb.constitution[/] - Establish project principles")
     steps_lines.append("   2.2 [cyan]/arb.specify[/] - Create baseline specification")
     steps_lines.append("   2.3 [cyan]/arb.plan[/] - Create implementation plan")
-    steps_lines.append("   2.4 [cyan]/arb.tasks[/] - Generate actionable tasks")
-    steps_lines.append("   2.5 [cyan]/arb.implement[/] - Execute implementation")
 
     steps_panel = Panel("\n".join(steps_lines), title="Next Steps", border_style="cyan", padding=(1,2))
     console.print()
@@ -1233,7 +1231,6 @@ def init(
         "Optional commands that you can use for your specs [bright_black](improve quality & confidence)[/bright_black]",
         "",
         f"○ [cyan]/arb.clarify[/] [bright_black](optional)[/bright_black] - Ask structured questions to de-risk ambiguous areas before planning (run before [cyan]/arb.plan[/] if used)",
-        f"○ [cyan]/arb.analyze[/] [bright_black](optional)[/bright_black] - Cross-artifact consistency & alignment report (after [cyan]/arb.tasks[/], before [cyan]/arb.implement[/])",
         f"○ [cyan]/arb.checklist[/] [bright_black](optional)[/bright_black] - Generate quality checklists to validate requirements completeness, clarity, and consistency (after [cyan]/arb.plan[/])"
     ]
     enhancements_panel = Panel("\n".join(enhancement_lines), title="Enhancement Commands", border_style="cyan", padding=(1,2))
