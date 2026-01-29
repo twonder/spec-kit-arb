@@ -87,7 +87,7 @@
 ## FinOps Impact *(mandatory)*
 
 <!--
-  Per Constitution Principle II, cost implications MUST be documented for every ADR.
+  Per Constitution Principle IV, cost implications MUST be documented for every ADR.
   This enables informed decision-making and prevents cost surprises.
 -->
 
@@ -107,7 +107,7 @@
 
 ### Cost Rationale
 
-[Explain why the cost of the chosen approach is acceptable. If not the cheapest option, justify the additional expense. Reference Constitution Principle II.]
+[Explain why the cost of the chosen approach is acceptable. If not the cheapest option, justify the additional expense. Reference Constitution Principle IV.]
 
 ## Related Decisions
 

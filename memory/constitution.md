@@ -2,7 +2,41 @@
 
 ## Core Principles
 
-### I. ADR-Driven Architecture
+### I. Quantifiable Value
+
+Every specification MUST establish quantifiable value that the feature will deliver:
+
+- **Define success metrics**: What measurements will prove this feature is valuable?
+- **Establish baselines**: What is the current state of these metrics?
+- **Set targets**: What specific, measurable improvements are expected?
+- **Identify measurement mechanisms**: How will progress be tracked?
+
+**When baselines don't exist**:
+
+If the metrics needed to measure value don't currently exist, this MUST be explicitly called out. The specification MUST include a **predecessor user story** that:
+
+1. Implements the instrumentation or data collection needed to measure current state
+2. Establishes the baseline measurement before the main feature work begins
+3. Is completed and verified BEFORE subsequent user stories can proceed
+
+**Example**:
+> **Predecessor User Story**: "As a product team, we need to instrument checkout flow completion rates so we can measure the impact of the new express checkout feature."
+>
+> **Acceptance Criteria**:
+> - Checkout funnel events are logged to analytics platform
+> - Dashboard shows current completion rate (baseline established)
+> - Alerting configured for significant deviations
+
+**Value categories to consider**:
+- **Revenue impact**: Conversion rates, average order value, customer lifetime value
+- **Cost reduction**: Operational efficiency, reduced manual processes, infrastructure savings
+- **User experience**: Task completion time, error rates, satisfaction scores
+- **Risk mitigation**: Security incidents, compliance violations, outage frequency
+- **Developer productivity**: Deployment frequency, lead time, mean time to recovery
+
+**Rationale**: Features without measurable value are impossible to evaluate. By requiring quantifiable metrics upfront, we ensure every feature can be objectively assessed for success or failure. Predecessor stories for measurement ensure we never implement features we cannot evaluate.
+
+### II. ADR-Driven Architecture
 
 All specifications MUST reference applicable Architecture Decision Records (ADRs). When a specification proposes a new technology, pattern, or significant architectural approach:
 
@@ -13,25 +47,6 @@ All specifications MUST reference applicable Architecture Decision Records (ADRs
 - ADRs MUST be searchable and discoverable; use consistent naming (`ADR-###-slug.md`)
 
 **Rationale**: ADRs preserve institutional knowledge and ensure consistency across features. Architectural decisions made implicitly in code are invisible, hard to find, and often repeated incorrectly. By requiring specs to reference ADRs, we ensure decisions are explicit, traceable, and considered.
-
-### II. FinOps-First (Cost-Driven Design)
-
-Cost is a primary driver of architectural and implementation decisions. Every specification and ADR MUST include a FinOps section that addresses:
-
-- **Estimated costs**: Monthly/annual cost projections for the proposed solution
-- **Cost drivers**: What factors most significantly impact cost (compute, storage, data transfer, API calls, etc.)
-- **Cost comparison**: How does this compare to alternatives? Include rejected options' cost profiles
-- **Cost optimization opportunities**: What can be done to reduce costs without sacrificing requirements?
-- **Cost monitoring**: How will costs be tracked and alerted on?
-- **Break-even analysis**: At what scale does the solution become cost-prohibitive or cost-advantageous?
-
-**Non-negotiables**:
-- MUST NOT proceed with implementation without cost estimates
-- MUST document cost assumptions and pricing model used
-- MUST identify cost ceilings and what happens when exceeded
-- MUST consider both development cost and operational cost
-
-**Rationale**: Cloud costs can spiral unexpectedly. By making cost a first-class concern in every decision, we prevent expensive surprises and ensure we're building sustainably within budget constraints.
 
 ### III. Availability Architecture Declaration
 
@@ -59,7 +74,26 @@ Every specification and ADR involving infrastructure or services MUST explicitly
 
 **Rationale**: Availability architecture fundamentally shapes cost, complexity, and user experience. Implicit assumptions about availability lead to either over-engineering (expensive) or under-engineering (outages). Explicit declaration forces conscious trade-off decisions.
 
-### IV. Specification Before Implementation
+### IV. FinOps (Cost-Driven Design)
+
+Cost is a primary driver of architectural and implementation decisions. Every specification and ADR MUST include a FinOps section that addresses:
+
+- **Estimated costs**: Monthly/annual cost projections for the proposed solution
+- **Cost drivers**: What factors most significantly impact cost (compute, storage, data transfer, API calls, etc.)
+- **Cost comparison**: How does this compare to alternatives? Include rejected options' cost profiles
+- **Cost optimization opportunities**: What can be done to reduce costs without sacrificing requirements?
+- **Cost monitoring**: How will costs be tracked and alerted on?
+- **Break-even analysis**: At what scale does the solution become cost-prohibitive or cost-advantageous?
+
+**Non-negotiables**:
+- MUST NOT proceed with implementation without cost estimates
+- MUST document cost assumptions and pricing model used
+- MUST identify cost ceilings and what happens when exceeded
+- MUST consider both development cost and operational cost
+
+**Rationale**: Cloud costs can spiral unexpectedly. By making cost a first-class concern in every decision, we prevent expensive surprises and ensure we're building sustainably within budget constraints.
+
+### V. Specification Before Implementation
 
 No implementation work begins without an approved specification:
 
@@ -71,7 +105,7 @@ No implementation work begins without an approved specification:
 
 **Rationale**: Specifications create alignment between stakeholders before expensive development begins. They serve as contracts that prevent scope creep and ensure everyone agrees on what "done" looks like.
 
-### V. Incremental Delivery
+### VI. Incremental Delivery
 
 Features MUST be designed for incremental, independently-deployable delivery:
 
@@ -83,7 +117,7 @@ Features MUST be designed for incremental, independently-deployable delivery:
 
 **Rationale**: Large releases are risky, hard to debug, and delay value delivery. Incremental delivery reduces risk, enables faster feedback, and allows course correction.
 
-### VI. Observability by Design
+### VII. Observability by Design
 
 Every feature MUST be observable from day one:
 
@@ -95,7 +129,7 @@ Every feature MUST be observable from day one:
 
 **Rationale**: You cannot improve what you cannot measure. Observability added after the fact is incomplete and expensive. Building it in from the start ensures we can diagnose issues and understand system behavior.
 
-### VII. Security as a Constraint
+### VIII. Security as a Constraint
 
 Security is not a feature; it is a constraint on all features:
 
@@ -155,13 +189,6 @@ Constitutional amendments require:
 5. Migration plan for existing work affected by the change
 6. Version increment (MAJOR for principle changes, MINOR for additions, PATCH for clarifications)
 
-### Compliance Verification
-
-- All pull requests MUST reference the spec they implement
-- Code reviews MUST verify constitutional compliance
-- Architectural review required for new services or significant changes
-- Regular audits of ADR coverage and currency
-
 ### Exception Process
 
 Exceptions to constitutional principles require:
@@ -169,7 +196,6 @@ Exceptions to constitutional principles require:
 1. Written justification documenting why compliance is impossible or counterproductive
 2. Risk assessment of the exception
 3. Approval from architecture review board
-4. Time-bound exception with review date
-5. Documentation in the relevant spec/ADR
+4. Documentation in the relevant spec/ADR
 
 **Version**: 1.0.0 | **Ratified**: 2025-01-29 | **Last Amended**: 2025-01-29

@@ -87,17 +87,27 @@ Given that feature description, do this:
          - No reasonable default exists
        - **LIMIT: Maximum 3 [NEEDS CLARIFICATION] markers total**
        - Prioritize clarifications by impact: scope > security/privacy > user experience > technical details
-    4. Fill User Scenarios & Testing section
+    4. **Quantifiable Value Section** (MANDATORY - Constitution Principle I):
+       a. Identify 2-4 success metrics that will prove this feature delivers value
+       b. For each metric, determine if a baseline measurement exists:
+          - If YES: Document the current baseline and set a target
+          - If NO: Mark "Baselines missing" checkbox
+       c. If baselines are missing:
+          - Create a Predecessor User Story (P0 priority) to establish measurement capability
+          - This story MUST be completed before implementing other stories
+          - The predecessor story should instrument/collect data needed for baseline
+       d. Identify the value category (Revenue, Cost Reduction, UX, Risk, Productivity)
+    5. Fill User Scenarios & Testing section
        If no clear user flow: ERROR "Cannot determine user scenarios"
-    5. Generate Functional Requirements
+    6. Generate Functional Requirements
        Each requirement must be testable
        Use reasonable defaults for unspecified details (document assumptions in Assumptions section)
-    6. Define Success Criteria
+    7. Define Success Criteria
        Create measurable, technology-agnostic outcomes
        Include both quantitative metrics (time, performance, volume) and qualitative measures (user satisfaction, task completion)
        Each criterion must be verifiable without implementation details
-    7. Identify Key Entities (if data involved)
-    8. **ADR Review and Creation** (MANDATORY):
+    8. Identify Key Entities (if data involved)
+    9. **ADR Review and Creation** (MANDATORY - Constitution Principle II):
        a. List the ADR directory: `ls -la adrs/` (or configured adrDir)
        b. Read ALL existing ADRs to understand current architectural decisions
        c. For each ADR, determine if it applies to this feature:
@@ -113,16 +123,16 @@ Given that feature description, do this:
           - Add to "New ADRs Required" section as TODO
           - Include: decision topic, why it needs an ADR, alternatives to consider
        f. If no ADRs exist yet, note this and still identify decisions that SHOULD have ADRs
-    9. **Availability Architecture** (MANDATORY for infrastructure/services):
-       a. Determine if this feature involves infrastructure or services
-       b. If yes, explicitly declare the availability approach:
-          - Single Region: State region, RTO/RPO, SPOFs, DR approach
-          - Multi-Region Active-Active: All regions serve traffic, bidirectional replication
-          - Multi-Region Active-Passive: Primary serves traffic, secondary on standby
-       c. Document rationale for the choice (cost, latency, compliance, complexity)
-       d. If multi-region, specify: failover strategy, consistency model, replication lag tolerance
-       e. Cross-reference with FinOps section for cost implications
-    10. **FinOps Section** (MANDATORY):
+    10. **Availability Architecture** (MANDATORY for infrastructure/services - Constitution Principle III):
+        a. Determine if this feature involves infrastructure or services
+        b. If yes, explicitly declare the availability approach:
+           - Single Region: State region, RTO/RPO, SPOFs, DR approach
+           - Multi-Region Active-Active: All regions serve traffic, bidirectional replication
+           - Multi-Region Active-Passive: Primary serves traffic, secondary on standby
+        c. Document rationale for the choice (cost, latency, compliance, complexity)
+        d. If multi-region, specify: failover strategy, consistency model, replication lag tolerance
+        e. Cross-reference with FinOps section for cost implications
+    11. **FinOps Section** (MANDATORY - Constitution Principle IV):
         a. Estimate costs for the proposed solution (compute, storage, network, etc.)
         b. Identify primary cost drivers and what scales with usage
         c. Compare costs against alternatives considered
@@ -130,7 +140,7 @@ Given that feature description, do this:
         e. Define budget ceiling, alert thresholds, and monitoring approach
         f. Calculate cost per unit (user/request/transaction)
         g. Note: If exact costs unknown, provide ranges and document assumptions
-    11. Return: SUCCESS (spec ready for planning)
+    12. Return: SUCCESS (spec ready for planning)
 
 5. Write the specification to SPEC_FILE using the template structure, replacing placeholders with concrete details derived from the feature description (arguments) while preserving section order and headings.
 
@@ -160,7 +170,15 @@ Given that feature description, do this:
       - [ ] Success criteria are technology-agnostic (no implementation details)
       - [ ] All acceptance scenarios are defined
 
-      ## ADR Compliance (Constitution Principle I)
+      ## Quantifiable Value (Constitution Principle I)
+
+      - [ ] Success metrics defined with specific targets
+      - [ ] Baseline measurements documented OR marked as missing
+      - [ ] If baselines missing: Predecessor user story (P0) included
+      - [ ] Value category identified (Revenue/Cost/UX/Risk/Productivity)
+      - [ ] Measurement method specified for each metric
+
+      ## ADR Compliance (Constitution Principle II)
 
       - [ ] All applicable existing ADRs are referenced
       - [ ] New ADRs identified for new technologies/patterns
@@ -176,7 +194,7 @@ Given that feature description, do this:
       - [ ] Failover strategy documented (if applicable)
       - [ ] Or marked N/A with justification (no infrastructure impact)
 
-      ## FinOps (Constitution Principle II)
+      ## FinOps (Constitution Principle IV)
 
       - [ ] Cost estimates provided (monthly/annual)
       - [ ] Cost drivers identified

@@ -66,7 +66,7 @@ Given that decision description, do this:
          - Region selection and rationale
          - Failover strategy and consistency model
       c. If not applicable, mark as "N/A - No availability implications"
-   9. **FinOps Impact** (MANDATORY - Constitution Principle II):
+   9. **FinOps Impact** (MANDATORY - Constitution Principle IV):
       a. Compare costs of chosen approach vs alternatives
       b. Identify primary cost drivers
       c. Document variable vs fixed costs

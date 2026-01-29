@@ -1,9 +1,64 @@
 # Feature Specification: [FEATURE NAME]
 
-**Feature Branch**: `[###-feature-name]`  
-**Created**: [DATE]  
-**Status**: Draft  
+**Feature Branch**: `[###-feature-name]`
+**Created**: [DATE]
+**Status**: Draft
 **Input**: User description: "$ARGUMENTS"
+
+## Quantifiable Value *(mandatory)*
+
+<!--
+  ACTION REQUIRED: Per Constitution Principle I, every spec MUST establish quantifiable value.
+
+  If baseline measurements don't exist, you MUST:
+  1. Explicitly call this out
+  2. Add a predecessor user story to establish the measurement capability
+  3. The predecessor story MUST be completed before subsequent stories
+-->
+
+### Success Metrics
+
+| Metric | Current Baseline | Target | Measurement Method |
+|--------|-----------------|--------|-------------------|
+| [e.g., Checkout completion rate] | [e.g., 72%] | [e.g., 85%] | [e.g., Analytics funnel events] |
+| [e.g., Average task completion time] | [e.g., 4.5 minutes] | [e.g., 2 minutes] | [e.g., Session recordings] |
+| [e.g., Support tickets per week] | [e.g., 150] | [e.g., < 50] | [e.g., Zendesk reports] |
+
+### Baseline Measurement Status
+
+- [ ] **All baselines established** - Proceed with implementation
+- [ ] **Baselines missing** - Predecessor user story required (see below)
+
+### Predecessor User Story *(required if baselines missing)*
+
+<!--
+  If measurement infrastructure doesn't exist, add a predecessor story here.
+  This story MUST be completed and baseline established BEFORE implementing the main feature.
+
+  Remove this section if all baselines are already established.
+-->
+
+**User Story 0 - Establish Measurement Baseline (Priority: P0)**
+
+As a [team/role], we need to [implement measurement capability] so we can [measure the impact of this feature].
+
+**Acceptance Criteria**:
+1. **Given** [measurement doesn't exist], **When** [instrumentation is deployed], **Then** [metric is captured in dashboard]
+2. **Given** [metric is captured], **When** [one week of data collected], **Then** [baseline is established and documented]
+
+**Baseline Established**: [ ] Yes, documented above | [ ] No, story must complete first
+
+### Value Category
+
+<!--
+  Check all that apply and provide specifics.
+-->
+
+- [ ] **Revenue Impact**: [Describe expected impact on conversion, AOV, LTV, etc.]
+- [ ] **Cost Reduction**: [Describe expected operational or infrastructure savings]
+- [ ] **User Experience**: [Describe expected improvement in task time, errors, satisfaction]
+- [ ] **Risk Mitigation**: [Describe expected reduction in security, compliance, or reliability risks]
+- [ ] **Developer Productivity**: [Describe expected improvement in deployment, lead time, MTTR]
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -193,7 +248,7 @@
 ## FinOps *(mandatory)*
 
 <!--
-  ACTION REQUIRED: Cost is a primary driver of decisions (Constitution Principle II).
+  ACTION REQUIRED: Cost is a primary driver of decisions (Constitution Principle IV).
   This section MUST be completed before implementation begins.
 
   If costs cannot be estimated, document why and what information is needed.
