@@ -1,5 +1,4 @@
 <div align="center">
-    <img src="./media/logo_large.webp" alt="Spec Kit Logo" width="200" height="200"/>
     <h1>🏛️ Spec Kit for Architectural Review Boards</h1>
     <h3><em>Structured architectural decision-making with AI assistance.</em></h3>
 </div>
@@ -73,7 +72,7 @@ specify check
 To upgrade Specify, see the [Upgrade Guide](./docs/upgrade.md) for detailed instructions. Quick upgrade:
 
 ```bash
-uv tool install specify-cli --force --from git+https://github.com/github/spec-kit.git
+uv tool install specify-cli --force --from git+https://github.com/github/spec-kit-arb.git
 ```
 
 #### Option 2: One-time Usage
@@ -81,7 +80,7 @@ uv tool install specify-cli --force --from git+https://github.com/github/spec-ki
 Run directly without installing:
 
 ```bash
-uvx --from git+https://github.com/github/spec-kit.git specify init <PROJECT_NAME>
+uvx --from git+https://github.com/github/spec-kit-arb.git specify init <PROJECT_NAME>
 ```
 
 **Benefits of persistent installation:**
@@ -91,15 +90,19 @@ uvx --from git+https://github.com/github/spec-kit.git specify init <PROJECT_NAME
 - Better tool management with `uv tool list`, `uv tool upgrade`, `uv tool uninstall`
 - Cleaner shell configuration
 
-### 2. Establish Governing Principles
+### 2. Review and Customize the Constitution
 
 Launch your AI assistant in the project directory. The `/arb.*` commands are available in the assistant.
 
-Use the **`/arb.constitution`** command to create your organization's governing principles that will guide all architectural decisions:
+The toolkit includes a **pre-installed constitution** at `memory/constitution.md` with sensible defaults covering quantifiable value, ADR requirements, availability architecture, FinOps, and more. Review these principles and modify them to fit your organization's needs.
+
+Use the **`/arb.constitution`** command to update the governing principles:
 
 ```bash
-/arb.constitution Create principles focused on cost optimization, security requirements, availability targets, and technology standardization
+/arb.constitution Add principles for our security requirements: all services must use mTLS, data at rest must be encrypted with customer-managed keys
 ```
+
+**Note**: The pre-installed constitution is a starting point. Teams should customize it to reflect their specific compliance requirements, technology standards, and organizational policies.
 
 ### 3. Create an Architecture Decision Record
 
@@ -235,9 +238,9 @@ When you run `/arb.specify` or `/arb.adr`, artifacts will automatically be creat
 
 ## 📚 Core Philosophy
 
-This toolkit is built on principles that support effective architectural governance:
+This toolkit is built on principles that support effective architectural governance. A **pre-installed constitution** (`memory/constitution.md`) provides sensible defaults that teams should customize for their needs:
 
-- **Constitution-driven decisions** — A project constitution defines non-negotiable principles that guide all architectural choices
+- **Constitution-driven decisions** — The constitution defines non-negotiable principles that guide all architectural choices
 - **ADR-first architecture** — Every significant technology choice is documented with context, alternatives, and consequences
 - **Quantifiable value** — Specifications must establish measurable success criteria and baselines
 - **FinOps awareness** — Cost is a first-class concern in every architectural decision
@@ -279,7 +282,7 @@ If you encounter issues with an agent, please open an issue so we can refine the
 ## 📖 Learn More
 
 - **[Spec-Driven Development Methodology](./spec-driven.md)** — Deep dive into the full process
-- **[Project Constitution](./memory/constitution.md)** — Core principles that govern architectural decisions
+- **[Project Constitution](./memory/constitution.md)** — Pre-installed principles that govern architectural decisions (customize for your team)
 
 ---
 
@@ -304,17 +307,27 @@ specify init --here
 specify init . --force
 ```
 
-### **STEP 1:** Establish Governing Principles
+### **STEP 1:** Review and Customize the Constitution
 
 Go to the project folder and run your AI agent. You will know that things are configured correctly if you see the `/arb.*` commands available.
 
-The first step should be establishing your project's governing principles using the `/arb.constitution` command:
+The toolkit includes a **pre-installed constitution** at `memory/constitution.md` with principles covering:
+- Quantifiable value requirements
+- ADR-driven architecture
+- Availability architecture declarations
+- FinOps (cost-driven design)
+- Specification before implementation
+- Incremental delivery
+- Observability by design
+- Security as a constraint
+
+Review these principles and customize them for your organization using the `/arb.constitution` command:
 
 ```text
-/arb.constitution Create principles focused on cost optimization, security requirements, availability targets, technology standardization, and ADR requirements for new technologies
+/arb.constitution Update to add our compliance requirements: SOC2 attestation required for all third-party services, GDPR data residency for EU customers
 ```
 
-This creates or updates the `.specify/memory/constitution.md` file with your project's foundational guidelines.
+The constitution at `memory/constitution.md` serves as the foundation for all architectural decisions. Modify it to reflect your team's specific standards and requirements.
 
 ### **STEP 2:** Create Architecture Decision Records
 
