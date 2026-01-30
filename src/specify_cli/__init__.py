@@ -10,18 +10,18 @@
 # ]
 # ///
 """
-Specify CLI - Setup tool for Specify projects
+Specify ARB CLI - Setup tool for Architectural Review Board projects
 
 Usage:
-    uvx specify-cli.py init <project-name>
-    uvx specify-cli.py init .
-    uvx specify-cli.py init --here
+    uvx --from git+https://github.com/twonder/spec-kit-arb.git specify-arb init <project-name>
+    uvx --from git+https://github.com/twonder/spec-kit-arb.git specify-arb init .
+    uvx --from git+https://github.com/twonder/spec-kit-arb.git specify-arb init --here
 
 Or install globally:
-    uv tool install --from specify-cli.py specify-cli
-    specify init <project-name>
-    specify init .
-    specify init --here
+    uv tool install specify-arb --from git+https://github.com/twonder/spec-kit-arb.git
+    specify-arb init <project-name>
+    specify-arb init .
+    specify-arb init --here
 """
 
 import os
@@ -241,7 +241,7 @@ BANNER = """
 ╚══════╝╚═╝     ╚══════╝ ╚═════╝╚═╝╚═╝        ╚═╝   
 """
 
-TAGLINE = "GitHub Spec Kit - Spec-Driven Development Toolkit"
+TAGLINE = "Spec Kit for Architectural Review Boards"
 class StepTracker:
     """Track and render hierarchical steps without emojis, similar to Claude Code tree output.
     Supports live auto-refresh via an attached refresh callback.
@@ -434,8 +434,8 @@ class BannerGroup(TyperGroup):
 
 
 app = typer.Typer(
-    name="specify",
-    help="Setup tool for Specify spec-driven development projects",
+    name="specify-arb",
+    help="Setup tool for Architectural Review Board projects - create ADRs and feature specifications",
     add_completion=False,
     invoke_without_command=True,
     cls=BannerGroup,
@@ -460,7 +460,7 @@ def callback(ctx: typer.Context):
     """Show banner when no subcommand is provided."""
     if ctx.invoked_subcommand is None and "--help" not in sys.argv and "-h" not in sys.argv:
         show_banner()
-        console.print(Align.center("[dim]Run 'specify --help' for usage information[/dim]"))
+        console.print(Align.center("[dim]Run 'specify-arb --help' for usage information[/dim]"))
         console.print()
 
 def run_command(cmd: list[str], check_return: bool = True, capture: bool = False, shell: bool = False) -> Optional[str]:
@@ -635,8 +635,8 @@ def merge_json_files(existing_path: Path, new_content: dict, verbose: bool = Fal
     return merged
 
 def download_template_from_github(ai_assistant: str, download_dir: Path, *, script_type: str = "sh", verbose: bool = True, show_progress: bool = True, client: httpx.Client = None, debug: bool = False, github_token: str = None) -> Tuple[Path, dict]:
-    repo_owner = "github"
-    repo_name = "spec-kit"
+    repo_owner = "twonder"
+    repo_name = "spec-kit-arb"
     if client is None:
         client = httpx.Client(verify=ssl_context)
 
@@ -956,8 +956,8 @@ def init(
     github_token: str = typer.Option(None, "--github-token", help="GitHub token to use for API requests (or set GH_TOKEN or GITHUB_TOKEN environment variable)"),
 ):
     """
-    Initialize a new Specify project from the latest template.
-    
+    Initialize a new ARB project from the latest template.
+
     This command will:
     1. Check that required tools are installed (git is optional)
     2. Let you choose your AI assistant
@@ -965,19 +965,19 @@ def init(
     4. Extract the template to a new project directory or current directory
     5. Initialize a fresh git repository (if not --no-git and no existing repo)
     6. Optionally set up AI assistant commands
-    
+
     Examples:
-        specify init my-project
-        specify init my-project --ai claude
-        specify init my-project --ai copilot --no-git
-        specify init --ignore-agent-tools my-project
-        specify init . --ai claude         # Initialize in current directory
-        specify init .                     # Initialize in current directory (interactive AI selection)
-        specify init --here --ai claude    # Alternative syntax for current directory
-        specify init --here --ai codex
-        specify init --here --ai codebuddy
-        specify init --here
-        specify init --here --force  # Skip confirmation when current directory not empty
+        specify-arb init my-project
+        specify-arb init my-project --ai claude
+        specify-arb init my-project --ai copilot --no-git
+        specify-arb init --ignore-agent-tools my-project
+        specify-arb init . --ai claude         # Initialize in current directory
+        specify-arb init .                     # Initialize in current directory (interactive AI selection)
+        specify-arb init --here --ai claude    # Alternative syntax for current directory
+        specify-arb init --here --ai codex
+        specify-arb init --here --ai codebuddy
+        specify-arb init --here
+        specify-arb init --here --force  # Skip confirmation when current directory not empty
     """
 
     show_banner()
@@ -1305,8 +1305,8 @@ def version():
             pass
     
     # Fetch latest template release version
-    repo_owner = "github"
-    repo_name = "spec-kit"
+    repo_owner = "twonder"
+    repo_name = "spec-kit-arb"
     api_url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/releases/latest"
     
     template_version = "unknown"

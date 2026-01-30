@@ -3,7 +3,7 @@
 This guide will help you get started with Spec-Driven Development using Spec Kit.
 
 > [!NOTE]
-> All automation scripts now provide both Bash (`.sh`) and PowerShell (`.ps1`) variants. The `specify` CLI auto-selects based on OS unless you pass `--script sh|ps`.
+> All automation scripts now provide both Bash (`.sh`) and PowerShell (`.ps1`) variants. The `specify-arb` CLI auto-selects based on OS unless you pass `--script sh|ps`.
 
 ## The 5-Step Process
 
@@ -12,21 +12,21 @@ This guide will help you get started with Spec-Driven Development using Spec Kit
 
 ### Step 1: Install Specify
 
-**In your terminal**, run the `specify` CLI command to initialize your project:
+**In your terminal**, run the `specify-arb` CLI command to initialize your project:
 
 ```bash
 # Create a new project directory
-uvx --from git+https://github.com/github/spec-kit.git specify init <PROJECT_NAME>
+uvx --from git+https://github.com/twonder/spec-kit-arb.git specify-arb init <PROJECT_NAME>
 
 # OR initialize in the current directory
-uvx --from git+https://github.com/github/spec-kit.git specify init .
+uvx --from git+https://github.com/twonder/spec-kit-arb.git specify-arb init .
 ```
 
 Pick script type explicitly (optional):
 
 ```bash
-uvx --from git+https://github.com/github/spec-kit.git specify init <PROJECT_NAME> --script ps  # Force PowerShell
-uvx --from git+https://github.com/github/spec-kit.git specify init <PROJECT_NAME> --script sh  # Force POSIX shell
+uvx --from git+https://github.com/twonder/spec-kit-arb.git specify-arb init <PROJECT_NAME> --script ps  # Force PowerShell
+uvx --from git+https://github.com/twonder/spec-kit-arb.git specify-arb init <PROJECT_NAME> --script sh  # Force POSIX shell
 ```
 
 ### Step 2: Define Your Constitution
@@ -137,4 +137,4 @@ This will identify any gaps, inconsistencies, or constitution violations before 
 
 - Read the [complete methodology](../spec-driven.md) for in-depth guidance
 - Check out [more examples](../templates) in the repository
-- Explore the [source code on GitHub](https://github.com/github/spec-kit)
+- Explore the [source code on GitHub](https://github.com/twonder/spec-kit-arb)

@@ -8,20 +8,20 @@
 
 | What to Upgrade | Command | When to Use |
 |----------------|---------|-------------|
-| **CLI Tool Only** | `uv tool install specify-cli --force --from git+https://github.com/github/spec-kit.git` | Get latest CLI features without touching project files |
-| **Project Files** | `specify init --here --force --ai <your-agent>` | Update slash commands, templates, and scripts in your project |
+| **CLI Tool Only** | `uv tool install specify-arb --force --from git+https://github.com/twonder/spec-kit-arb.git` | Get latest CLI features without touching project files |
+| **Project Files** | `specify-arb init --here --force --ai <your-agent>` | Update slash commands, templates, and scripts in your project |
 | **Both** | Run CLI upgrade, then project update | Recommended for major version updates |
 
 ---
 
 ## Part 1: Upgrade the CLI Tool
 
-The CLI tool (`specify`) is separate from your project files. Upgrade it to get the latest features and bug fixes.
+The CLI tool (`specify-arb`) is separate from your project files. Upgrade it to get the latest features and bug fixes.
 
 ### If you installed with `uv tool install`
 
 ```bash
-uv tool install specify-cli --force --from git+https://github.com/github/spec-kit.git
+uv tool install specify-arb --force --from git+https://github.com/twonder/spec-kit-arb.git
 ```
 
 ### If you use one-shot `uvx` commands
@@ -29,13 +29,13 @@ uv tool install specify-cli --force --from git+https://github.com/github/spec-ki
 No upgrade needed—`uvx` always fetches the latest version. Just run your commands as normal:
 
 ```bash
-uvx --from git+https://github.com/github/spec-kit.git specify init --here --ai copilot
+uvx --from git+https://github.com/twonder/spec-kit-arb.git specify-arb init --here --ai copilot
 ```
 
 ### Verify the upgrade
 
 ```bash
-specify check
+specify-arb check
 ```
 
 This shows installed tools and confirms the CLI is working.
@@ -48,7 +48,7 @@ When Spec Kit releases new features (like new slash commands or updated template
 
 ### What gets updated?
 
-Running `specify init --here --force` will update:
+Running `specify-arb init --here --force` will update:
 
 - ✅ **Slash command files** (`.claude/commands/`, `.github/prompts/`, etc.)
 - ✅ **Script files** (`.specify/scripts/`)
@@ -71,7 +71,7 @@ The `specs/` directory is completely excluded from template packages and will ne
 Run this inside your project directory:
 
 ```bash
-specify init --here --force --ai <your-agent>
+specify-arb init --here --force --ai <your-agent>
 ```
 
 Replace `<your-agent>` with your AI assistant. Refer to this list of [Supported AI Agents](../README.md#-supported-ai-agents)
@@ -79,7 +79,7 @@ Replace `<your-agent>` with your AI assistant. Refer to this list of [Supported 
 **Example:**
 
 ```bash
-specify init --here --force --ai copilot
+specify-arb init --here --force --ai copilot
 ```
 
 ### Understanding the `--force` flag
@@ -102,7 +102,7 @@ With `--force`, it skips the confirmation and proceeds immediately.
 
 ### 1. Constitution file will be overwritten
 
-**Known issue:** `specify init --here --force` currently overwrites `.specify/memory/constitution.md` with the default template, erasing any customizations you made.
+**Known issue:** `specify-arb init --here --force` currently overwrites `.specify/memory/constitution.md` with the default template, erasing any customizations you made.
 
 **Workaround:**
 
@@ -111,7 +111,7 @@ With `--force`, it skips the confirmation and proceeds immediately.
 cp .specify/memory/constitution.md .specify/memory/constitution-backup.md
 
 # 2. Run the upgrade
-specify init --here --force --ai copilot
+specify-arb init --here --force --ai copilot
 
 # 3. Restore your customized constitution
 mv .specify/memory/constitution-backup.md .specify/memory/constitution.md
@@ -165,10 +165,10 @@ Restart your IDE to refresh the command list.
 
 ```bash
 # Upgrade CLI (if using persistent install)
-uv tool install specify-cli --force --from git+https://github.com/github/spec-kit.git
+uv tool install specify-arb --force --from git+https://github.com/twonder/spec-kit-arb.git
 
 # Update project files to get new commands
-specify init --here --force --ai copilot
+specify-arb init --here --force --ai copilot
 
 # Restore your constitution if customized
 git restore .specify/memory/constitution.md
@@ -182,10 +182,10 @@ cp .specify/memory/constitution.md /tmp/constitution-backup.md
 cp -r .specify/templates /tmp/templates-backup
 
 # 2. Upgrade CLI
-uv tool install specify-cli --force --from git+https://github.com/github/spec-kit.git
+uv tool install specify-arb --force --from git+https://github.com/twonder/spec-kit-arb.git
 
 # 3. Update project
-specify init --here --force --ai copilot
+specify-arb init --here --force --ai copilot
 
 # 4. Restore customizations
 mv /tmp/constitution-backup.md .specify/memory/constitution.md
@@ -218,7 +218,7 @@ If you initialized your project with `--no-git`, you can still upgrade:
 cp .specify/memory/constitution.md /tmp/constitution-backup.md
 
 # Run upgrade
-specify init --here --force --ai copilot --no-git
+specify-arb init --here --force --ai copilot --no-git
 
 # Restore customizations
 mv /tmp/constitution-backup.md .specify/memory/constitution.md
@@ -239,13 +239,13 @@ The `--no-git` flag tells Spec Kit to **skip git repository initialization**. Th
 **During initial setup:**
 
 ```bash
-specify init my-project --ai copilot --no-git
+specify-arb init my-project --ai copilot --no-git
 ```
 
 **During upgrade:**
 
 ```bash
-specify init --here --force --ai copilot --no-git
+specify-arb init --here --force --ai copilot --no-git
 ```
 
 ### What `--no-git` does NOT do
@@ -323,7 +323,7 @@ Do you want to continue? [y/N]
 
 **What this means:**
 
-This warning appears when you run `specify init --here` (or `specify init .`) in a directory that already has files. It's telling you:
+This warning appears when you run `specify-arb init --here` (or `specify-arb init .`) in a directory that already has files. It's telling you:
 
 1. **The directory has existing content** - In the example, 25 files/folders
 2. **Files will be merged** - New template files will be added alongside your existing files
@@ -352,7 +352,7 @@ Only Spec Kit infrastructure files:
 - **Use `--force` flag** - Skip this confirmation entirely:
 
   ```bash
-  specify init --here --force --ai copilot
+  specify-arb init --here --force --ai copilot
   ```
 
 **When you see this warning:**
@@ -371,10 +371,10 @@ Verify the installation:
 # Check installed tools
 uv tool list
 
-# Should show specify-cli
+# Should show specify-arb
 
 # Verify path
-which specify
+which specify-arb
 
 # Should point to the uv tool installation directory
 ```
@@ -382,23 +382,23 @@ which specify
 If not found, reinstall:
 
 ```bash
-uv tool uninstall specify-cli
-uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
+uv tool uninstall specify-arb
+uv tool install specify-arb --from git+https://github.com/twonder/spec-kit-arb.git
 ```
 
 ### "Do I need to run specify every time I open my project?"
 
-**Short answer:** No, you only run `specify init` once per project (or when upgrading).
+**Short answer:** No, you only run `specify-arb init` once per project (or when upgrading).
 
 **Explanation:**
 
-The `specify` CLI tool is used for:
+The `specify-arb` CLI tool is used for:
 
-- **Initial setup:** `specify init` to bootstrap Spec Kit in your project
-- **Upgrades:** `specify init --here --force` to update templates and commands
-- **Diagnostics:** `specify check` to verify tool installation
+- **Initial setup:** `specify-arb init` to bootstrap Spec Kit in your project
+- **Upgrades:** `specify-arb init --here --force` to update templates and commands
+- **Diagnostics:** `specify-arb check` to verify tool installation
 
-Once you've run `specify init`, the slash commands (like `/arb.specify`, `/arb.plan`, etc.) are **permanently installed** in your project's agent folder (`.claude/`, `.github/prompts/`, etc.). Your AI assistant reads these command files directly—no need to run `specify` again.
+Once you've run `specify-arb init`, the slash commands (like `/arb.specify`, `/arb.plan`, etc.) are **permanently installed** in your project's agent folder (`.claude/`, `.github/prompts/`, etc.). Your AI assistant reads these command files directly—no need to run `specify-arb` again.
 
 **If your agent isn't recognizing slash commands:**
 
@@ -414,11 +414,11 @@ Once you've run `specify init`, the slash commands (like `/arb.specify`, `/arb.p
 
 2. **Restart your IDE/editor completely** (not just reload window)
 
-3. **Check you're in the correct directory** where you ran `specify init`
+3. **Check you're in the correct directory** where you ran `specify-arb init`
 
 4. **For some agents**, you may need to reload the workspace or clear cache
 
-**Related issue:** If Copilot can't open local files or uses PowerShell commands unexpectedly, this is typically an IDE context issue, not related to `specify`. Try:
+**Related issue:** If Copilot can't open local files or uses PowerShell commands unexpectedly, this is typically an IDE context issue, not related to `specify-arb`. Try:
 
 - Restarting VS Code
 - Checking file permissions
@@ -439,6 +439,5 @@ Spec Kit follows semantic versioning for major releases. The CLI and project fil
 After upgrading:
 
 - **Test new slash commands:** Run `/arb.constitution` or another command to verify everything works
-- **Review release notes:** Check [GitHub Releases](https://github.com/github/spec-kit/releases) for new features and breaking changes
+- **Review release notes:** Check [GitHub Releases](https://github.com/twonder/spec-kit-arb/releases) for new features and breaking changes
 - **Update workflows:** If new commands were added, update your team's development workflows
-- **Check documentation:** Visit [github.io/spec-kit](https://github.github.io/spec-kit/) for updated guides

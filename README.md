@@ -18,7 +18,7 @@
 - [🤔 What is This?](#-what-is-this)
 - [⚡ Get Started](#-get-started)
 - [🤖 Supported AI Agents](#-supported-ai-agents)
-- [🔧 Specify CLI Reference](#-specify-cli-reference)
+- [🔧 CLI Reference](#-cli-reference)
 - [📚 Core Philosophy](#-core-philosophy)
 - [🎯 Use Cases](#-use-cases)
 - [🔧 Prerequisites](#-prerequisites)
@@ -42,7 +42,7 @@ By using AI assistance with structured templates, teams produce comprehensive ar
 
 ## ⚡ Get Started
 
-### 1. Install Specify CLI
+### 1. Install the CLI
 
 Choose your preferred installation method:
 
@@ -51,28 +51,28 @@ Choose your preferred installation method:
 Install once and use everywhere:
 
 ```bash
-uv tool install specify-cli --from git+https://github.com/twonder/spec-kit-arb.git
+uv tool install specify-arb --from git+https://github.com/twonder/spec-kit-arb.git
 ```
 
 Then use the tool directly:
 
 ```bash
 # Create new project
-specify init <PROJECT_NAME>
+specify-arb init <PROJECT_NAME>
 
 # Or initialize in existing project
-specify init . --ai claude
+specify-arb init . --ai claude
 # or
-specify init --here --ai claude
+specify-arb init --here --ai claude
 
 # Check installed tools
-specify check
+specify-arb check
 ```
 
-To upgrade Specify, see the [Upgrade Guide](./docs/upgrade.md) for detailed instructions. Quick upgrade:
+To upgrade, see the [Upgrade Guide](./docs/upgrade.md) for detailed instructions. Quick upgrade:
 
 ```bash
-uv tool install specify-cli --force --from git+https://github.com/github/spec-kit-arb.git
+uv tool install specify-arb --force --from git+https://github.com/twonder/spec-kit-arb.git
 ```
 
 #### Option 2: One-time Usage
@@ -80,7 +80,7 @@ uv tool install specify-cli --force --from git+https://github.com/github/spec-ki
 Run directly without installing:
 
 ```bash
-uvx --from git+https://github.com/github/spec-kit-arb.git specify init <PROJECT_NAME>
+uvx --from git+https://github.com/twonder/spec-kit-arb.git specify-arb init <PROJECT_NAME>
 ```
 
 **Benefits of persistent installation:**
@@ -150,18 +150,18 @@ For detailed step-by-step instructions, see our [comprehensive guide](./spec-dri
 | [Amp](https://ampcode.com/)                                                          | ✅      |                                                                                                                                           |
 | [Amazon Q Developer CLI](https://aws.amazon.com/developer/learning/q-developer-cli/) | ⚠️      | Amazon Q Developer CLI [does not support](https://github.com/aws/amazon-q-developer-cli/issues/3064) custom arguments for slash commands. |
 
-## 🔧 Specify CLI Reference
+## 🔧 CLI Reference
 
-The `specify` command supports the following options:
+The `specify-arb` command supports the following options:
 
 ### Commands
 
 | Command | Description                                                                                                                                             |
 | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `init`  | Initialize a new Specify project from the latest template                                                                                               |
+| `init`  | Initialize a new project from the latest template                                                                                                       |
 | `check` | Check for installed tools (`git`, `claude`, `gemini`, `code`/`code-insiders`, `cursor-agent`, `windsurf`, `qwen`, `opencode`, `codex`, `shai`, `qoder`) |
 
-### `specify init` Arguments & Options
+### `specify-arb init` Arguments & Options
 
 | Argument/Option        | Type     | Description                                                                                                                                                                                  |
 | ---------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -178,7 +178,7 @@ The `specify` command supports the following options:
 
 ### Available Slash Commands
 
-After running `specify init`, your AI coding agent will have access to these slash commands:
+After running `specify-arb init`, your AI coding agent will have access to these slash commands:
 
 #### Core Commands
 
@@ -291,20 +291,20 @@ If you encounter issues with an agent, please open an issue so we can refine the
 <details>
 <summary>Click to expand the detailed step-by-step walkthrough</summary>
 
-You can use the Specify CLI to bootstrap your project, which will bring in the required artifacts in your environment. Run:
+You can use the CLI to bootstrap your project, which will bring in the required artifacts in your environment. Run:
 
 ```bash
-specify init <project_name>
+specify-arb init <project_name>
 ```
 
 Or initialize in the current directory:
 
 ```bash
-specify init .
+specify-arb init .
 # or use the --here flag
-specify init --here
+specify-arb init --here
 # Skip confirmation when the directory already has files
-specify init . --force
+specify-arb init . --force
 ```
 
 ### **STEP 1:** Review and Customize the Constitution
