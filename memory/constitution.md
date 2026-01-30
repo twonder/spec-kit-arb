@@ -13,14 +13,14 @@ Every specification MUST establish quantifiable value that the feature will deli
 
 **When baselines don't exist**:
 
-If the metrics needed to measure value don't currently exist, this MUST be explicitly called out. The specification MUST include a **predecessor user story** that:
+If the metrics needed to measure value don't currently exist, this MUST be explicitly called out. The specification MUST include a **predecessor feature** that:
 
 1. Implements the instrumentation or data collection needed to measure current state
 2. Establishes the baseline measurement before the main feature work begins
-3. Is completed and verified BEFORE subsequent user stories can proceed
+3. Is completed and verified BEFORE subsequent features can proceed
 
 **Example**:
-> **Predecessor User Story**: "As a product team, we need to instrument checkout flow completion rates so we can measure the impact of the new express checkout feature."
+> **Predecessor Feature**: "Instrument checkout flow completion rates so we can measure the impact of the new express checkout feature."
 >
 > **Acceptance Criteria**:
 > - Checkout funnel events are logged to analytics platform
@@ -109,7 +109,7 @@ No implementation work begins without an approved specification:
 
 Features MUST be designed for incremental, independently-deployable delivery:
 
-- Each user story SHOULD be deployable independently
+- Each feature SHOULD be deployable independently
 - Prefer feature flags over long-lived feature branches
 - MVP first: identify the smallest valuable increment
 - Avoid "big bang" releases; prefer continuous delivery

@@ -15,8 +15,8 @@
 
   If baseline measurements don't exist, you MUST:
   1. Explicitly call this out
-  2. Add a predecessor user story to establish the measurement capability
-  3. The predecessor story MUST be completed before subsequent stories
+  2. Add a predecessor feature to establish the measurement capability
+  3. The predecessor feature MUST be completed before subsequent features
 -->
 
 ### Success Metrics
@@ -30,26 +30,26 @@
 ### Baseline Measurement Status
 
 - [ ] **All baselines established** - Proceed with implementation
-- [ ] **Baselines missing** - Predecessor user story required (see below)
+- [ ] **Baselines missing** - Predecessor feature required (see below)
 
-### Predecessor User Story *(required if baselines missing)*
+### Predecessor Feature *(required if baselines missing)*
 
 <!--
-  If measurement infrastructure doesn't exist, add a predecessor story here.
-  This story MUST be completed and baseline established BEFORE implementing the main feature.
+  If measurement infrastructure doesn't exist, add a predecessor feature here.
+  This feature MUST be completed and baseline established BEFORE implementing the main feature.
 
   Remove this section if all baselines are already established.
 -->
 
-**User Story 0 - Establish Measurement Baseline (Priority: P0)**
+**Feature 0 - Establish Measurement Baseline (Priority: P0)**
 
-As a [team/role], we need to [implement measurement capability] so we can [measure the impact of this feature].
+Implement measurement capability to [measure the impact of the main feature].
 
 **Acceptance Criteria**:
 1. **Given** [measurement doesn't exist], **When** [instrumentation is deployed], **Then** [metric is captured in dashboard]
 2. **Given** [metric is captured], **When** [one week of data collected], **Then** [baseline is established and documented]
 
-**Baseline Established**: [ ] Yes, documented above | [ ] No, story must complete first
+**Baseline Established**: [ ] Yes, documented above | [ ] No, feature must complete first
 
 ### Value Category
 
@@ -63,24 +63,24 @@ As a [team/role], we need to [implement measurement capability] so we can [measu
 - [ ] **Risk Mitigation**: [Describe expected reduction in security, compliance, or reliability risks]
 - [ ] **Developer Productivity**: [Describe expected improvement in deployment, lead time, MTTR]
 
-## User Scenarios & Testing *(mandatory)*
+## Features & Testing *(mandatory)*
 
 <!--
-  IMPORTANT: User stories should be PRIORITIZED as user journeys ordered by importance.
-  Each user story/journey must be INDEPENDENTLY TESTABLE - meaning if you implement just ONE of them,
+  IMPORTANT: Features should be PRIORITIZED and ordered by importance.
+  Each feature must be INDEPENDENTLY TESTABLE - meaning if you implement just ONE of them,
   you should still have a viable MVP (Minimum Viable Product) that delivers value.
-  
-  Assign priorities (P1, P2, P3, etc.) to each story, where P1 is the most critical.
-  Think of each story as a standalone slice of functionality that can be:
+
+  Assign priorities (P1, P2, P3, etc.) to each feature, where P1 is the most critical.
+  Think of each feature as a standalone slice of functionality that can be:
   - Developed independently
   - Tested independently
   - Deployed independently
   - Demonstrated to users independently
 -->
 
-### User Story 1 - [Brief Title] (Priority: P1)
+### Feature 1 - [Brief Title] (Priority: P1)
 
-[Describe this user journey in plain language]
+[Describe this feature in plain language - what it does and why users need it]
 
 **Why this priority**: [Explain the value and why it has this priority level]
 
@@ -93,23 +93,9 @@ As a [team/role], we need to [implement measurement capability] so we can [measu
 
 ---
 
-### User Story 2 - [Brief Title] (Priority: P2)
+### Feature 2 - [Brief Title] (Priority: P2)
 
-[Describe this user journey in plain language]
-
-**Why this priority**: [Explain the value and why it has this priority level]
-
-**Independent Test**: [Describe how this can be tested independently]
-
-**Acceptance Scenarios**:
-
-1. **Given** [initial state], **When** [action], **Then** [expected outcome]
-
----
-
-### User Story 3 - [Brief Title] (Priority: P3)
-
-[Describe this user journey in plain language]
+[Describe this feature in plain language - what it does and why users need it]
 
 **Why this priority**: [Explain the value and why it has this priority level]
 
@@ -121,7 +107,21 @@ As a [team/role], we need to [implement measurement capability] so we can [measu
 
 ---
 
-[Add more user stories as needed, each with an assigned priority]
+### Feature 3 - [Brief Title] (Priority: P3)
+
+[Describe this feature in plain language - what it does and why users need it]
+
+**Why this priority**: [Explain the value and why it has this priority level]
+
+**Independent Test**: [Describe how this can be tested independently]
+
+**Acceptance Scenarios**:
+
+1. **Given** [initial state], **When** [action], **Then** [expected outcome]
+
+---
+
+[Add more features as needed, each with an assigned priority]
 
 ### Edge Cases
 

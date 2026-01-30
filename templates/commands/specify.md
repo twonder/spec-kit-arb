@@ -104,12 +104,12 @@ Given that feature description, do this:
           - If YES: Document the current baseline and set a target
           - If NO: Mark "Baselines missing" checkbox
        c. If baselines are missing:
-          - Create a Predecessor User Story (P0 priority) to establish measurement capability
-          - This story MUST be completed before implementing other stories
-          - The predecessor story should instrument/collect data needed for baseline
+          - Create a Predecessor Feature (P0 priority) to establish measurement capability
+          - This feature MUST be completed before implementing other features
+          - The predecessor feature should instrument/collect data needed for baseline
        d. Identify the value category (Revenue, Cost Reduction, UX, Risk, Productivity)
-    5. Fill User Scenarios & Testing section
-       If no clear user flow: ERROR "Cannot determine user scenarios"
+    5. Fill Features & Testing section
+       If no clear feature definition: ERROR "Cannot determine features"
     6. Generate Functional Requirements
        Each requirement must be testable
        Use reasonable defaults for unspecified details (document assumptions in Assumptions section)
@@ -185,7 +185,7 @@ Given that feature description, do this:
 
       - [ ] Success metrics defined with specific targets
       - [ ] Baseline measurements documented OR marked as missing
-      - [ ] If baselines missing: Predecessor user story (P0) included
+      - [ ] If baselines missing: Predecessor feature (P0) included
       - [ ] Value category identified (Revenue/Cost/UX/Risk/Productivity)
       - [ ] Measurement method specified for each metric
 

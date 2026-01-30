@@ -26,7 +26,7 @@ Throughout this specification process, research agents gather critical context. 
 
 From the PRD, AI generates implementation plans that map requirements to technical decisions. Every technology choice has documented rationale. Every architectural decision traces back to specific requirements. Throughout this process, consistency validation continuously improves quality. AI analyzes specifications for ambiguity, contradictions, and gaps—not as a one-time gate, but as an ongoing refinement.
 
-Code generation begins as soon as specifications and their implementation plans are stable enough, but they do not have to be "complete." Early generations might be exploratory—testing whether the specification makes sense in practice. Domain concepts become data models. User stories become API endpoints. Acceptance scenarios become tests. This merges development and testing through specification—test scenarios aren't written after code, they're part of the specification that generates both implementation and tests.
+Code generation begins as soon as specifications and their implementation plans are stable enough, but they do not have to be "complete." Early generations might be exploratory—testing whether the specification makes sense in practice. Domain concepts become data models. Features become API endpoints. Acceptance scenarios become tests. This merges development and testing through specification—test scenarios aren't written after code, they're part of the specification that generates both implementation and tests.
 
 The feedback loop extends beyond initial development. Production metrics and incidents don't just trigger hotfixes—they update specifications for the next regeneration. Performance bottlenecks become new non-functional requirements. Security vulnerabilities become constraints that affect all future generations. This iterative dance between specification, implementation, and operational reality is where true understanding emerges and where the traditional SDLC transforms into a continuous evolution.
 
@@ -42,7 +42,7 @@ Third, the pace of change accelerates. Requirements change far more rapidly toda
 
 SDD can support what-if/simulation experiments: "If we need to re-implement or change the application to promote a business need to sell more T-shirts, how would we implement and experiment for that?"
 
-SDD transforms requirement changes from obstacles into normal workflow. When specifications drive implementation, pivots become systematic regenerations rather than manual rewrites. Change a core requirement in the PRD, and affected implementation plans update automatically. Modify a user story, and corresponding API endpoints regenerate. This isn't just about initial development—it's about maintaining engineering velocity through inevitable changes.
+SDD transforms requirement changes from obstacles into normal workflow. When specifications drive implementation, pivots become systematic regenerations rather than manual rewrites. Change a core requirement in the PRD, and affected implementation plans update automatically. Modify a feature, and corresponding API endpoints regenerate. This isn't just about initial development—it's about maintaining engineering velocity through inevitable changes.
 
 ## Core Principles
 
@@ -87,7 +87,7 @@ This command transforms a simple feature description (the user-prompt) into a co
 
 Once a feature specification exists, this command creates a comprehensive implementation plan:
 
-1. **Specification Analysis**: Reads and understands the feature requirements, user stories, and acceptance criteria
+1. **Specification Analysis**: Reads and understands the feature requirements, features, and acceptance criteria
 2. **Constitutional Compliance**: Ensures alignment with project constitution and architectural principles
 3. **Technical Translation**: Converts business requirements into technical architecture and implementation details
 4. **Detailed Documentation**: Generates supporting documents for data models, API contracts, and test scenarios
@@ -132,7 +132,7 @@ Total: ~12 hours of documentation work
 
 In 10 minutes, you have:
 
-- A complete feature specification with user stories and acceptance criteria
+- A complete feature specification with features and acceptance criteria
 - A detailed implementation plan with technology choices and rationale
 - API contracts and data models ready for code generation
 - Comprehensive test scenarios for both automated and manual testing
@@ -244,7 +244,7 @@ Templates explicitly discourage speculation:
 - [ ] All phases have clear prerequisites and deliverables
 ```
 
-This stops the LLM from adding "nice to have" features that complicate implementation. Every feature must trace back to a concrete user story with clear acceptance criteria.
+This stops the LLM from adding "nice to have" features that complicate implementation. Every feature must trace back to a concrete specification with clear acceptance criteria.
 
 ### The Compound Effect
 

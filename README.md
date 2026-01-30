@@ -237,7 +237,7 @@ Essential commands for the Spec-Driven Development workflow:
 | Command             | Description                                                              |
 | ------------------- | ------------------------------------------------------------------------ |
 | `/arb.constitution` | Create or update project governing principles and development guidelines |
-| `/arb.specify`      | Define what you want to build (requirements and user stories)            |
+| `/arb.specify`      | Define what you want to build (requirements and features)                |
 | `/arb.plan`         | Create technical implementation plans with your chosen tech stack        |
 
 #### Optional Commands
@@ -446,7 +446,7 @@ After this prompt is entered, you should see Claude Code kick off the planning a
 
 Once this step is completed, you should have a new branch created (e.g., `001-create-taskify`), as well as a new specification in the `specs/001-create-taskify` directory.
 
-The produced specification should contain a set of user stories and functional requirements, as defined in the template.
+The produced specification should contain a set of features and functional requirements, as defined in the template.
 
 At this stage, your project folder contents should resemble the following:
 

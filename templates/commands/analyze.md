@@ -50,7 +50,7 @@ Load only the minimal necessary context from each artifact:
 - Overview/Context
 - Functional Requirements
 - Non-Functional Requirements
-- User Stories and acceptance criteria
+- Features and acceptance criteria
 - ADR References
 - Availability Architecture declarations
 - FinOps section
@@ -89,8 +89,8 @@ Load only the minimal necessary context from each artifact:
 Create internal representations (do not include raw artifacts in output):
 
 - **Requirements inventory**: Each functional + non-functional requirement with a stable key (derive slug based on imperative phrase; e.g., "User can upload file" → `user-can-upload-file`)
-- **User story/action inventory**: Discrete user actions with acceptance criteria
-- **Plan coverage mapping**: Map each requirement/story to plan sections that address it
+- **Feature inventory**: Discrete features with acceptance criteria
+- **Plan coverage mapping**: Map each requirement/feature to plan sections that address it
 - **Constitution rule set**: Extract principle names and MUST/SHOULD normative statements
 - **Value metrics**: Extract success metrics and their measurement status
 
@@ -112,9 +112,9 @@ Focus on high-signal findings. Limit to 50 findings total; aggregate remainder i
 #### C. Underspecification
 
 - Requirements with verbs but missing object or measurable outcome
-- User stories missing acceptance criteria alignment
+- Features missing acceptance criteria alignment
 - Success metrics without baselines or targets
-- Missing predecessor user stories when baselines don't exist
+- Missing predecessor features when baselines don't exist
 
 #### D. Constitution Alignment
 
@@ -170,7 +170,7 @@ Output a Markdown report (no file writes) with the following structure:
 **Quantifiable Value Status:**
 - Metrics defined: [count]
 - Baselines established: [count]
-- Predecessor stories needed: [count]
+- Predecessor features needed: [count]
 
 **Metrics:**
 
