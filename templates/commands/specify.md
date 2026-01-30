@@ -73,7 +73,18 @@ Given that feature description, do this:
 
 3. Load `templates/spec-template.md` to understand required sections.
 
-4. Follow this execution flow:
+4. **Load user configuration** (if available):
+   - Check for `.specify/local.config.json` in the repository root
+   - If found, extract:
+     - `user.name` → Use as Author
+     - `user.team` → Use as Team
+     - Determine System from the feature description or user's team config
+   - If local config doesn't exist, use defaults:
+     - Team: "shared"
+     - System: "cross-cutting"
+     - Author: Leave blank or use git user.name if available
+
+5. Follow this execution flow:
 
     1. Parse user description from Input
        If empty: ERROR "No feature description provided"

@@ -3,6 +3,9 @@
 **Feature Branch**: `[###-feature-name]`
 **Created**: [DATE]
 **Status**: Draft
+**Team**: [TEAM_NAME or "shared"]
+**System**: [SYSTEM_NAME or "cross-cutting"]
+**Author**: [AUTHOR_NAME]
 **Input**: User description: "$ARGUMENTS"
 
 ## Quantifiable Value *(mandatory)*

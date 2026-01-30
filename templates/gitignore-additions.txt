@@ -1,0 +1,3 @@
+# Spec Kit - Local config (user-specific, not tracked)
+.specify/local.config.json
+local.config.json

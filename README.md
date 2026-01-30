@@ -256,6 +256,35 @@ Additional commands for enhanced quality and validation:
 | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `SPECIFY_FEATURE` | Override feature detection for non-Git repositories. Set to the feature directory name (e.g., `001-photo-albums`) to work on a specific feature when not using Git branches.<br/>\*\*Must be set in the context of the agent you're working with prior to using `/arb.plan` or follow-up commands. |
 
+### Local Configuration (Team/System Organization)
+
+For larger projects with multiple teams, you can configure team-specific settings using a local config file:
+
+1. Copy the template: `cp .specify/templates/local.template.config.json .specify/local.config.json`
+2. Edit `.specify/local.config.json` with your settings:
+
+```json
+{
+  "user": {
+    "name": "Your Name",
+    "team": "platform",
+    "email": "you@example.com"
+  },
+  "teams": {
+    "platform": {
+      "name": "Platform Team",
+      "systems": ["identity", "api-gateway", "infrastructure"],
+      "specsDir": "specs/platform",
+      "adrDir": "adrs/platform"
+    }
+  }
+}
+```
+
+**Note**: `local.config.json` is gitignored—it's user-specific and not tracked in version control.
+
+When you run `/arb.specify`, specs will automatically be created in your team's directory and tagged with your team/system.
+
 ## 📚 Core Philosophy
 
 Spec-Driven Development is a structured process that emphasizes:

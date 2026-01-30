@@ -2,6 +2,8 @@
 
 **Status**: Proposed | Accepted | Deprecated | Superseded
 **Date**: [DATE]
+**Team**: [TEAM_NAME or "shared"]
+**System**: [SYSTEM_NAME or "cross-cutting"]
 **Deciders**: [LIST OF DECISION MAKERS]
 
 ## Context

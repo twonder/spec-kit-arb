@@ -1,0 +1,65 @@
+{
+  "_readme": "Copy this file to local.config.json and customize for your environment. local.config.json is gitignored.",
+
+  "specsDir": "specs",
+  "adrDir": "adrs",
+  "useNumberedPrefix": true,
+
+  "user": {
+    "name": "Your Name",
+    "team": "platform",
+    "email": "you@example.com"
+  },
+
+  "teams": {
+    "platform": {
+      "name": "Platform Team",
+      "description": "Core infrastructure and shared services",
+      "systems": ["identity", "api-gateway", "infrastructure", "observability"],
+      "specsDir": "specs/platform",
+      "adrDir": "adrs/platform"
+    },
+    "payments": {
+      "name": "Payments Team",
+      "description": "Payment processing and billing",
+      "systems": ["checkout", "billing", "refunds", "subscriptions"],
+      "specsDir": "specs/payments",
+      "adrDir": "adrs/payments"
+    },
+    "mobile": {
+      "name": "Mobile Team",
+      "description": "iOS and Android applications",
+      "systems": ["ios-app", "android-app", "mobile-api"],
+      "specsDir": "specs/mobile",
+      "adrDir": "adrs/mobile"
+    },
+    "shared": {
+      "name": "Shared/Cross-Team",
+      "description": "Decisions and specs that span multiple teams",
+      "systems": ["cross-cutting"],
+      "specsDir": "specs/shared",
+      "adrDir": "adrs/shared"
+    }
+  },
+
+  "defaults": {
+    "availabilityArchitecture": "single-region",
+    "region": "us-east-1",
+    "costCeiling": {
+      "monthly": 5000,
+      "currency": "USD"
+    }
+  },
+
+  "integrations": {
+    "github": {
+      "createIssues": false,
+      "labelPrefix": "spec:"
+    },
+    "jira": {
+      "enabled": false,
+      "project": "",
+      "issueType": "Story"
+    }
+  }
+}

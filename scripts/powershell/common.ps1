@@ -5,8 +5,8 @@
 $script:SpecifyConfig = $null
 $script:SpecifyConfigLoaded = $false
 
-# Load configuration from .specify/config.json
-# Priority: 1) config.json, 2) environment variables, 3) defaults
+# Load configuration from config files
+# Priority: 1) local.config.json (user-specific), 2) config.json, 3) environment variables, 4) defaults
 function Get-SpecifyConfig {
     param([string]$RepoRoot)
 
@@ -20,19 +20,57 @@ function Get-SpecifyConfig {
         specsDir = "specs"
         adrDir = "adrs"
         useNumberedPrefix = $true
+        userName = ""
+        userTeam = ""
+        userEmail = ""
+        teams = @{}
     }
 
-    # Try to load from config file
+    # Try to load from base config file first
     if ($RepoRoot) {
-        $configFile = Join-Path $RepoRoot ".specify/config.json"
-        if (Test-Path $configFile) {
+        $baseConfigFile = Join-Path $RepoRoot ".specify/config.json"
+        if (Test-Path $baseConfigFile) {
             try {
-                $jsonConfig = Get-Content $configFile -Raw | ConvertFrom-Json
+                $jsonConfig = Get-Content $baseConfigFile -Raw | ConvertFrom-Json
                 if ($jsonConfig.specsDir) { $config.specsDir = $jsonConfig.specsDir }
                 if ($jsonConfig.adrDir) { $config.adrDir = $jsonConfig.adrDir }
                 if ($null -ne $jsonConfig.useNumberedPrefix) { $config.useNumberedPrefix = $jsonConfig.useNumberedPrefix }
             } catch {
-                Write-Verbose "Could not parse config file: $_"
+                Write-Verbose "Could not parse base config file: $_"
+            }
+        }
+
+        # Load local config (overrides base config)
+        $localConfigFile = Join-Path $RepoRoot ".specify/local.config.json"
+        if (Test-Path $localConfigFile) {
+            try {
+                $localConfig = Get-Content $localConfigFile -Raw | ConvertFrom-Json
+
+                # Override with local config values
+                if ($localConfig.specsDir) { $config.specsDir = $localConfig.specsDir }
+                if ($localConfig.adrDir) { $config.adrDir = $localConfig.adrDir }
+                if ($null -ne $localConfig.useNumberedPrefix) { $config.useNumberedPrefix = $localConfig.useNumberedPrefix }
+
+                # User-specific settings (only from local config)
+                if ($localConfig.user) {
+                    if ($localConfig.user.name) { $config.userName = $localConfig.user.name }
+                    if ($localConfig.user.team) { $config.userTeam = $localConfig.user.team }
+                    if ($localConfig.user.email) { $config.userEmail = $localConfig.user.email }
+                }
+
+                # Teams configuration
+                if ($localConfig.teams) {
+                    $config.teams = $localConfig.teams
+                }
+
+                # If user has a team, check for team-specific specsDir/adrDir overrides
+                if ($config.userTeam -and $localConfig.teams -and $localConfig.teams.$($config.userTeam)) {
+                    $teamConfig = $localConfig.teams.$($config.userTeam)
+                    if ($teamConfig.specsDir) { $config.specsDir = $teamConfig.specsDir }
+                    if ($teamConfig.adrDir) { $config.adrDir = $teamConfig.adrDir }
+                }
+            } catch {
+                Write-Verbose "Could not parse local config file: $_"
             }
         }
     }
@@ -77,6 +115,24 @@ function Use-NumberedPrefix {
     $repoRoot = Get-RepoRoot
     $config = Get-SpecifyConfig -RepoRoot $repoRoot
     return $config.useNumberedPrefix
+}
+
+function Get-UserName {
+    $repoRoot = Get-RepoRoot
+    $config = Get-SpecifyConfig -RepoRoot $repoRoot
+    return $config.userName
+}
+
+function Get-UserTeam {
+    $repoRoot = Get-RepoRoot
+    $config = Get-SpecifyConfig -RepoRoot $repoRoot
+    return $config.userTeam
+}
+
+function Get-UserEmail {
+    $repoRoot = Get-RepoRoot
+    $config = Get-SpecifyConfig -RepoRoot $repoRoot
+    return $config.userEmail
 }
 
 function Get-RepoRoot {

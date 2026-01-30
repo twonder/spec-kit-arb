@@ -5,10 +5,13 @@
 _SPECIFY_SPECS_DIR=""
 _SPECIFY_ADR_DIR=""
 _SPECIFY_USE_NUMBERED_PREFIX=""
+_SPECIFY_USER_NAME=""
+_SPECIFY_USER_TEAM=""
+_SPECIFY_USER_EMAIL=""
 _SPECIFY_CONFIG_LOADED=false
 
-# Load configuration from .specify/config.json
-# Priority: 1) config.json, 2) environment variables, 3) defaults
+# Load configuration from config files
+# Priority: 1) local.config.json (user-specific), 2) config.json, 3) environment variables, 4) defaults
 load_config() {
     local repo_root="$1"
 
@@ -17,25 +20,67 @@ load_config() {
         return
     fi
 
-    local config_file="$repo_root/.specify/config.json"
+    local base_config="$repo_root/.specify/config.json"
+    local local_config="$repo_root/.specify/local.config.json"
 
-    if [[ -f "$config_file" ]]; then
+    # Helper to read a value from JSON file using jq or fallback
+    _read_json_value() {
+        local file="$1"
+        local key="$2"
+        local default="$3"
+
+        if [[ ! -f "$file" ]]; then
+            echo "$default"
+            return
+        fi
+
         if command -v jq &>/dev/null; then
-            # Use jq for reliable parsing
-            _SPECIFY_SPECS_DIR=$(jq -r '.specsDir // empty' "$config_file" 2>/dev/null)
-            _SPECIFY_ADR_DIR=$(jq -r '.adrDir // empty' "$config_file" 2>/dev/null)
-            local use_prefix=$(jq -r '.useNumberedPrefix // empty' "$config_file" 2>/dev/null)
-            if [[ -n "$use_prefix" ]]; then
-                _SPECIFY_USE_NUMBERED_PREFIX="$use_prefix"
-            fi
+            local value=$(jq -r "$key // empty" "$file" 2>/dev/null)
+            echo "${value:-$default}"
         else
-            # Fallback: simple grep/sed for basic JSON
-            _SPECIFY_SPECS_DIR=$(grep -o '"specsDir"[[:space:]]*:[[:space:]]*"[^"]*"' "$config_file" 2>/dev/null | sed 's/.*:[[:space:]]*"\([^"]*\)"/\1/' || true)
-            _SPECIFY_ADR_DIR=$(grep -o '"adrDir"[[:space:]]*:[[:space:]]*"[^"]*"' "$config_file" 2>/dev/null | sed 's/.*:[[:space:]]*"\([^"]*\)"/\1/' || true)
-            local use_prefix=$(grep -o '"useNumberedPrefix"[[:space:]]*:[[:space:]]*[a-z]*' "$config_file" 2>/dev/null | sed 's/.*:[[:space:]]*//' || true)
-            if [[ -n "$use_prefix" ]]; then
-                _SPECIFY_USE_NUMBERED_PREFIX="$use_prefix"
-            fi
+            # Fallback for simple keys (doesn't support nested paths)
+            local simple_key=$(echo "$key" | sed 's/^\.//' | sed 's/\..*$//')
+            local value=$(grep -o "\"$simple_key\"[[:space:]]*:[[:space:]]*\"[^\"]*\"" "$file" 2>/dev/null | sed 's/.*:[[:space:]]*"\([^"]*\)"/\1/' || true)
+            echo "${value:-$default}"
+        fi
+    }
+
+    # Load base config first, then override with local config
+    # Local config takes priority over base config
+
+    # specsDir - check local first, then base
+    _SPECIFY_SPECS_DIR=$(_read_json_value "$local_config" '.specsDir' "")
+    if [[ -z "$_SPECIFY_SPECS_DIR" ]]; then
+        _SPECIFY_SPECS_DIR=$(_read_json_value "$base_config" '.specsDir' "")
+    fi
+
+    # adrDir - check local first, then base
+    _SPECIFY_ADR_DIR=$(_read_json_value "$local_config" '.adrDir' "")
+    if [[ -z "$_SPECIFY_ADR_DIR" ]]; then
+        _SPECIFY_ADR_DIR=$(_read_json_value "$base_config" '.adrDir' "")
+    fi
+
+    # useNumberedPrefix - check local first, then base
+    _SPECIFY_USE_NUMBERED_PREFIX=$(_read_json_value "$local_config" '.useNumberedPrefix' "")
+    if [[ -z "$_SPECIFY_USE_NUMBERED_PREFIX" ]]; then
+        _SPECIFY_USE_NUMBERED_PREFIX=$(_read_json_value "$base_config" '.useNumberedPrefix' "")
+    fi
+
+    # User-specific settings (only from local config)
+    _SPECIFY_USER_NAME=$(_read_json_value "$local_config" '.user.name' "")
+    _SPECIFY_USER_TEAM=$(_read_json_value "$local_config" '.user.team' "")
+    _SPECIFY_USER_EMAIL=$(_read_json_value "$local_config" '.user.email' "")
+
+    # If user has a team, check for team-specific specsDir/adrDir overrides
+    if [[ -n "$_SPECIFY_USER_TEAM" ]] && command -v jq &>/dev/null && [[ -f "$local_config" ]]; then
+        local team_specs_dir=$(jq -r ".teams.${_SPECIFY_USER_TEAM}.specsDir // empty" "$local_config" 2>/dev/null)
+        local team_adr_dir=$(jq -r ".teams.${_SPECIFY_USER_TEAM}.adrDir // empty" "$local_config" 2>/dev/null)
+
+        if [[ -n "$team_specs_dir" ]]; then
+            _SPECIFY_SPECS_DIR="$team_specs_dir"
+        fi
+        if [[ -n "$team_adr_dir" ]]; then
+            _SPECIFY_ADR_DIR="$team_adr_dir"
         fi
     fi
 
@@ -83,6 +128,36 @@ use_numbered_prefix() {
         load_config "$repo_root"
     fi
     [[ "$_SPECIFY_USE_NUMBERED_PREFIX" == "true" ]]
+}
+
+# Get user name from local config
+get_user_name() {
+    if [[ "$_SPECIFY_CONFIG_LOADED" != "true" ]]; then
+        local repo_root
+        repo_root=$(get_repo_root)
+        load_config "$repo_root"
+    fi
+    echo "$_SPECIFY_USER_NAME"
+}
+
+# Get user team from local config
+get_user_team() {
+    if [[ "$_SPECIFY_CONFIG_LOADED" != "true" ]]; then
+        local repo_root
+        repo_root=$(get_repo_root)
+        load_config "$repo_root"
+    fi
+    echo "$_SPECIFY_USER_TEAM"
+}
+
+# Get user email from local config
+get_user_email() {
+    if [[ "$_SPECIFY_CONFIG_LOADED" != "true" ]]; then
+        local repo_root
+        repo_root=$(get_repo_root)
+        load_config "$repo_root"
+    fi
+    echo "$_SPECIFY_USER_EMAIL"
 }
 
 # Get repository root, with fallback for non-git repositories
