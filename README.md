@@ -1,32 +1,27 @@
 <div align="center">
     <img src="./media/logo_large.webp" alt="Spec Kit Logo" width="200" height="200"/>
-    <h1>🌱 Spec Kit</h1>
-    <h3><em>Build high-quality software faster.</em></h3>
+    <h1>🏛️ Spec Kit for Architectural Review Boards</h1>
+    <h3><em>Structured architectural decision-making with AI assistance.</em></h3>
 </div>
 
 <p align="center">
-    <strong>An open source toolkit that allows you to focus on product scenarios and predictable outcomes instead of vibe coding every piece from scratch.</strong>
+    <strong>An open source toolkit for Architectural Review Boards (ARBs) to create well-structured Architecture Decision Records (ADRs) and feature specifications.</strong>
 </p>
 
 <p align="center">
-    <a href="https://github.com/github/spec-kit/actions/workflows/release.yml"><img src="https://github.com/github/spec-kit/actions/workflows/release.yml/badge.svg" alt="Release"/></a>
-    <a href="https://github.com/github/spec-kit/stargazers"><img src="https://img.shields.io/github/stars/github/spec-kit?style=social" alt="GitHub stars"/></a>
-    <a href="https://github.com/github/spec-kit/blob/main/LICENSE"><img src="https://img.shields.io/github/license/github/spec-kit" alt="License"/></a>
-    <a href="https://github.github.io/spec-kit/"><img src="https://img.shields.io/badge/docs-GitHub_Pages-blue" alt="Documentation"/></a>
+    <em>Forked from and inspired by <a href="https://github.com/github/spec-kit">github/spec-kit</a></em>
 </p>
 
 ---
 
 ## Table of Contents
 
-- [🤔 What is Spec-Driven Development?](#-what-is-spec-driven-development)
+- [🤔 What is This?](#-what-is-this)
 - [⚡ Get Started](#-get-started)
-- [📽️ Video Overview](#️-video-overview)
 - [🤖 Supported AI Agents](#-supported-ai-agents)
 - [🔧 Specify CLI Reference](#-specify-cli-reference)
 - [📚 Core Philosophy](#-core-philosophy)
-- [🌟 Development Phases](#-development-phases)
-- [🎯 Experimental Goals](#-experimental-goals)
+- [🎯 Use Cases](#-use-cases)
 - [🔧 Prerequisites](#-prerequisites)
 - [📖 Learn More](#-learn-more)
 - [📋 Detailed Process](#-detailed-process)
@@ -36,9 +31,15 @@
 - [🙏 Acknowledgements](#-acknowledgements)
 - [📄 License](#-license)
 
-## 🤔 What is Spec-Driven Development?
+## 🤔 What is This?
 
-Spec-Driven Development **flips the script** on traditional software development. For decades, code has been king — specifications were just scaffolding we built and discarded once the "real work" of coding began. Spec-Driven Development changes this: **specifications become executable**, directly generating working implementations rather than just guiding them.
+This toolkit helps Architectural Review Boards (ARBs) and engineering teams create consistent, high-quality architectural artifacts:
+
+- **Architecture Decision Records (ADRs)** — Document technology choices, trade-offs, and rationale
+- **Feature Specifications** — Define what to build and why, with clear acceptance criteria
+- **Implementation Plans** — Translate specifications into actionable technical plans
+
+By using AI assistance with structured templates, teams produce comprehensive architectural documentation that captures context, alternatives considered, and consequences — making decisions discoverable and reviewable for future team members.
 
 ## ⚡ Get Started
 
@@ -51,7 +52,7 @@ Choose your preferred installation method:
 Install once and use everywhere:
 
 ```bash
-uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
+uv tool install specify-cli --from git+https://github.com/twonder/spec-kit-arb.git
 ```
 
 Then use the tool directly:
@@ -90,62 +91,61 @@ uvx --from git+https://github.com/github/spec-kit.git specify init <PROJECT_NAME
 - Better tool management with `uv tool list`, `uv tool upgrade`, `uv tool uninstall`
 - Cleaner shell configuration
 
-### 2. Establish project principles
+### 2. Establish Governing Principles
 
 Launch your AI assistant in the project directory. The `/arb.*` commands are available in the assistant.
 
-Use the **`/arb.constitution`** command to create your project's governing principles and development guidelines that will guide all subsequent development.
+Use the **`/arb.constitution`** command to create your organization's governing principles that will guide all architectural decisions:
 
 ```bash
-/arb.constitution Create principles focused on code quality, testing standards, user experience consistency, and performance requirements
+/arb.constitution Create principles focused on cost optimization, security requirements, availability targets, and technology standardization
 ```
 
-### 3. Create the spec
+### 3. Create an Architecture Decision Record
 
-Use the **`/arb.specify`** command to describe what you want to build. Focus on the **what** and **why**, not the tech stack.
+Use the **`/arb.adr`** command to document architectural decisions with proper context and rationale:
 
 ```bash
-/arb.specify Build an application that can help me organize my photos in separate photo albums. Albums are grouped by date and can be re-organized by dragging and dropping on the main page. Albums are never in other nested albums. Within each album, photos are previewed in a tile-like interface.
+/arb.adr Use PostgreSQL for primary database storage
 ```
 
-### 4. Create a technical implementation plan
+This creates a structured ADR with:
+- Context explaining why the decision is needed
+- The decision itself
+- Consequences (positive, negative, neutral)
+- Alternatives considered with trade-offs
+- FinOps impact analysis
 
-Use the **`/arb.plan`** command to provide your tech stack and architecture choices.
+### 4. Create a Feature Specification
+
+Use the **`/arb.specify`** command to define what you want to build. Focus on the **what** and **why**, not the technical implementation:
 
 ```bash
-/arb.plan The application uses Vite with minimal number of libraries. Use vanilla HTML, CSS, and JavaScript as much as possible. Images are not uploaded anywhere and metadata is stored in a local SQLite database.
+/arb.specify Build a user authentication system that supports SSO integration with corporate identity providers and maintains audit logs for compliance
+```
+
+### 5. Create a Technical Implementation Plan
+
+Use the **`/arb.plan`** command to translate the specification into a technical plan:
+
+```bash
+/arb.plan Use OAuth 2.0 with OIDC, integrate with Azure AD, store sessions in Redis, audit logs in CloudWatch
 ```
 
 For detailed step-by-step instructions, see our [comprehensive guide](./spec-driven.md).
-
-## 📽️ Video Overview
-
-Want to see Spec Kit in action? Watch our [video overview](https://www.youtube.com/watch?v=a9eR1xsfvHg&pp=0gcJCckJAYcqIYzv)!
-
-[![Spec Kit video header](/media/spec-kit-video-header.jpg)](https://www.youtube.com/watch?v=a9eR1xsfvHg&pp=0gcJCckJAYcqIYzv)
 
 ## 🤖 Supported AI Agents
 
 | Agent                                                                                | Support | Notes                                                                                                                                     |
 | ------------------------------------------------------------------------------------ | ------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| [Qoder CLI](https://qoder.com/cli)                                                   | ✅      |                                                                                                                                           |
-| [Amazon Q Developer CLI](https://aws.amazon.com/developer/learning/q-developer-cli/) | ⚠️      | Amazon Q Developer CLI [does not support](https://github.com/aws/amazon-q-developer-cli/issues/3064) custom arguments for slash commands. |
-| [Amp](https://ampcode.com/)                                                          | ✅      |                                                                                                                                           |
-| [Auggie CLI](https://docs.augmentcode.com/cli/overview)                              | ✅      |                                                                                                                                           |
 | [Claude Code](https://www.anthropic.com/claude-code)                                 | ✅      |                                                                                                                                           |
-| [CodeBuddy CLI](https://www.codebuddy.ai/cli)                                        | ✅      |                                                                                                                                           |
-| [Codex CLI](https://github.com/openai/codex)                                         | ✅      |                                                                                                                                           |
 | [Cursor](https://cursor.sh/)                                                         | ✅      |                                                                                                                                           |
-| [Gemini CLI](https://github.com/google-gemini/gemini-cli)                            | ✅      |                                                                                                                                           |
 | [GitHub Copilot](https://code.visualstudio.com/)                                     | ✅      |                                                                                                                                           |
-| [IBM Bob](https://www.ibm.com/products/bob)                                          | ✅      | IDE-based agent with slash command support                                                                                                |
-| [Jules](https://jules.google.com/)                                                   | ✅      |                                                                                                                                           |
-| [Kilo Code](https://github.com/Kilo-Org/kilocode)                                    | ✅      |                                                                                                                                           |
-| [opencode](https://opencode.ai/)                                                     | ✅      |                                                                                                                                           |
-| [Qwen Code](https://github.com/QwenLM/qwen-code)                                     | ✅      |                                                                                                                                           |
-| [Roo Code](https://roocode.com/)                                                     | ✅      |                                                                                                                                           |
-| [SHAI (OVHcloud)](https://github.com/ovh/shai)                                       | ✅      |                                                                                                                                           |
+| [Gemini CLI](https://github.com/google-gemini/gemini-cli)                            | ✅      |                                                                                                                                           |
+| [Codex CLI](https://github.com/openai/codex)                                         | ✅      |                                                                                                                                           |
 | [Windsurf](https://windsurf.com/)                                                    | ✅      |                                                                                                                                           |
+| [Amp](https://ampcode.com/)                                                          | ✅      |                                                                                                                                           |
+| [Amazon Q Developer CLI](https://aws.amazon.com/developer/learning/q-developer-cli/) | ⚠️      | Amazon Q Developer CLI [does not support](https://github.com/aws/amazon-q-developer-cli/issues/3064) custom arguments for slash commands. |
 
 ## 🔧 Specify CLI Reference
 
@@ -173,92 +173,40 @@ The `specify` command supports the following options:
 | `--debug`              | Flag     | Enable detailed debug output for troubleshooting                                                                                                                                             |
 | `--github-token`       | Option   | GitHub token for API requests (or set GH_TOKEN/GITHUB_TOKEN env variable)                                                                                                                    |
 
-### Examples
-
-```bash
-# Basic project initialization
-specify init my-project
-
-# Initialize with specific AI assistant
-specify init my-project --ai claude
-
-# Initialize with Cursor support
-specify init my-project --ai cursor-agent
-
-# Initialize with Qoder support
-specify init my-project --ai qoder
-
-# Initialize with Windsurf support
-specify init my-project --ai windsurf
-
-# Initialize with Amp support
-specify init my-project --ai amp
-
-# Initialize with SHAI support
-specify init my-project --ai shai
-
-# Initialize with IBM Bob support
-specify init my-project --ai bob
-
-# Initialize with PowerShell scripts (Windows/cross-platform)
-specify init my-project --ai copilot --script ps
-
-# Initialize in current directory
-specify init . --ai copilot
-# or use the --here flag
-specify init --here --ai copilot
-
-# Force merge into current (non-empty) directory without confirmation
-specify init . --force --ai copilot
-# or
-specify init --here --force --ai copilot
-
-# Skip git initialization
-specify init my-project --ai gemini --no-git
-
-# Enable debug output for troubleshooting
-specify init my-project --ai claude --debug
-
-# Use GitHub token for API requests (helpful for corporate environments)
-specify init my-project --ai claude --github-token ghp_your_token_here
-
-# Check system requirements
-specify check
-```
-
 ### Available Slash Commands
 
-After running `specify init`, your AI coding agent will have access to these slash commands for structured development:
+After running `specify init`, your AI coding agent will have access to these slash commands:
 
 #### Core Commands
 
-Essential commands for the Spec-Driven Development workflow:
+Essential commands for architectural decision-making:
 
 | Command             | Description                                                              |
 | ------------------- | ------------------------------------------------------------------------ |
-| `/arb.constitution` | Create or update project governing principles and development guidelines |
-| `/arb.specify`      | Define what you want to build (requirements and features)                |
-| `/arb.plan`         | Create technical implementation plans with your chosen tech stack        |
+| `/arb.constitution` | Create or update project governing principles and architectural guidelines |
+| `/arb.adr`          | Create a new Architecture Decision Record (ADR)                          |
+| `/arb.specify`      | Define feature requirements and acceptance criteria                      |
+| `/arb.plan`         | Create technical implementation plans from specifications                |
 
-#### Optional Commands
+#### Quality & Validation Commands
 
-Additional commands for enhanced quality and validation:
+Additional commands for ensuring consistency and completeness:
 
 | Command          | Description                                                                                                                          |
 | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `/arb.clarify`   | Clarify underspecified areas (recommended before `/arb.plan`; formerly `/quizme`)                                                    |
-| `/arb.analyze`   | Cross-artifact consistency & alignment analysis (run after `/arb.plan` to validate spec-plan alignment)                              |
-| `/arb.checklist` | Generate custom quality checklists that validate requirements completeness, clarity, and consistency (like "unit tests for English") |
+| `/arb.clarify`   | Identify underspecified areas and resolve ambiguities (recommended before `/arb.plan`)                                               |
+| `/arb.analyze`   | Cross-artifact consistency analysis (validates alignment between spec, plan, ADRs, and constitution)                                 |
+| `/arb.checklist` | Generate custom quality checklists for requirements validation                                                                       |
 
 ### Environment Variables
 
 | Variable          | Description                                                                                                                                                                                                                                                                                            |
 | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `SPECIFY_FEATURE` | Override feature detection for non-Git repositories. Set to the feature directory name (e.g., `001-photo-albums`) to work on a specific feature when not using Git branches.<br/>\*\*Must be set in the context of the agent you're working with prior to using `/arb.plan` or follow-up commands. |
+| `SPECIFY_FEATURE` | Override feature detection for non-Git repositories. Set to the feature directory name (e.g., `001-auth-system`) to work on a specific feature when not using Git branches.<br/>\*\*Must be set in the context of the agent you're working with prior to using `/arb.plan` or follow-up commands. |
 
 ### Local Configuration (Team/System Organization)
 
-For larger projects with multiple teams, you can configure team-specific settings using a local config file:
+For organizations with multiple teams, you can configure team-specific settings using a local config file:
 
 1. Copy the template: `cp .specify/templates/local.template.config.json .specify/local.config.json`
 2. Edit `.specify/local.config.json` with your settings:
@@ -283,55 +231,45 @@ For larger projects with multiple teams, you can configure team-specific setting
 
 **Note**: `local.config.json` is gitignored—it's user-specific and not tracked in version control.
 
-When you run `/arb.specify`, specs will automatically be created in your team's directory and tagged with your team/system.
+When you run `/arb.specify` or `/arb.adr`, artifacts will automatically be created in your team's directory and tagged with your team/system.
 
 ## 📚 Core Philosophy
 
-Spec-Driven Development is a structured process that emphasizes:
+This toolkit is built on principles that support effective architectural governance:
 
-- **Intent-driven development** where specifications define the "*what*" before the "*how*"
-- **Rich specification creation** using guardrails and organizational principles
-- **Multi-step refinement** rather than one-shot code generation from prompts
-- **Heavy reliance** on advanced AI model capabilities for specification interpretation
+- **Constitution-driven decisions** — A project constitution defines non-negotiable principles that guide all architectural choices
+- **ADR-first architecture** — Every significant technology choice is documented with context, alternatives, and consequences
+- **Quantifiable value** — Specifications must establish measurable success criteria and baselines
+- **FinOps awareness** — Cost is a first-class concern in every architectural decision
+- **Availability declarations** — Infrastructure decisions explicitly declare availability architecture (single/multi-region, active-active/passive)
 
-## 🌟 Development Phases
+## 🎯 Use Cases
 
-| Phase                                    | Focus                    | Key Activities                                                                                                                                                     |
-| ---------------------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **0-to-1 Development** ("Greenfield")    | Generate from scratch    | <ul><li>Start with high-level requirements</li><li>Generate specifications</li><li>Plan implementation steps</li><li>Build production-ready applications</li></ul> |
-| **Creative Exploration**                 | Parallel implementations | <ul><li>Explore diverse solutions</li><li>Support multiple technology stacks & architectures</li><li>Experiment with UX patterns</li></ul>                         |
-| **Iterative Enhancement** ("Brownfield") | Brownfield modernization | <ul><li>Add features iteratively</li><li>Modernize legacy systems</li><li>Adapt processes</li></ul>                                                                |
+### Architectural Review Boards
 
-## 🎯 Experimental Goals
+- Standardize how architectural decisions are documented across teams
+- Ensure all decisions capture alternatives considered and trade-offs
+- Track cost implications of technology choices
+- Maintain searchable, discoverable decision history
 
-Our research and experimentation focus on:
+### Engineering Teams
 
-### Technology independence
+- Document technology choices with proper context for future team members
+- Create feature specifications that clearly separate what from how
+- Validate specifications against organizational principles before implementation
+- Generate implementation plans that trace back to requirements
 
-- Create applications using diverse technology stacks
-- Validate the hypothesis that Spec-Driven Development is a process not tied to specific technologies, programming languages, or frameworks
+### Compliance & Auditing
 
-### Enterprise constraints
-
-- Demonstrate mission-critical application development
-- Incorporate organizational constraints (cloud providers, tech stacks, engineering practices)
-- Support enterprise design systems and compliance requirements
-
-### User-centric development
-
-- Build applications for different user cohorts and preferences
-- Support various development approaches (from vibe-coding to AI-native development)
-
-### Creative & iterative processes
-
-- Validate the concept of parallel implementation exploration
-- Provide robust iterative feature development workflows
-- Extend processes to handle upgrades and modernization tasks
+- Maintain audit trails of architectural decisions
+- Document security and compliance considerations in context
+- Track availability and disaster recovery decisions
+- Record cost optimization decisions and rationale
 
 ## 🔧 Prerequisites
 
 - **Linux/macOS/Windows**
-- [Supported](#-supported-ai-agents) AI coding agent.
+- [Supported](#-supported-ai-agents) AI coding agent
 - [uv](https://docs.astral.sh/uv/) for package management
 - [Python 3.11+](https://www.python.org/downloads/)
 - [Git](https://git-scm.com/downloads)
@@ -340,8 +278,8 @@ If you encounter issues with an agent, please open an issue so we can refine the
 
 ## 📖 Learn More
 
-- **[Complete Spec-Driven Development Methodology](./spec-driven.md)** - Deep dive into the full process
-- **[Detailed Walkthrough](#-detailed-process)** - Step-by-step implementation guide
+- **[Spec-Driven Development Methodology](./spec-driven.md)** — Deep dive into the full process
+- **[Project Constitution](./memory/constitution.md)** — Core principles that govern architectural decisions
 
 ---
 
@@ -364,223 +302,79 @@ specify init .
 specify init --here
 # Skip confirmation when the directory already has files
 specify init . --force
-# or
-specify init --here --force
 ```
 
-![Specify CLI bootstrapping a new project in the terminal](./media/specify_cli.gif)
+### **STEP 1:** Establish Governing Principles
 
-You will be prompted to select the AI agent you are using. You can also proactively specify it directly in the terminal:
+Go to the project folder and run your AI agent. You will know that things are configured correctly if you see the `/arb.*` commands available.
 
-```bash
-specify init <project_name> --ai claude
-specify init <project_name> --ai gemini
-specify init <project_name> --ai copilot
-
-# Or in current directory:
-specify init . --ai claude
-specify init . --ai codex
-
-# or use --here flag
-specify init --here --ai claude
-specify init --here --ai codex
-
-# Force merge into a non-empty current directory
-specify init . --force --ai claude
-
-# or
-specify init --here --force --ai claude
-```
-
-The CLI will check if you have Claude Code, Gemini CLI, Cursor CLI, Qwen CLI, opencode, Codex CLI, Qoder CLI, or Amazon Q Developer CLI installed. If you do not, or you prefer to get the templates without checking for the right tools, use `--ignore-agent-tools` with your command:
-
-```bash
-specify init <project_name> --ai claude --ignore-agent-tools
-```
-
-### **STEP 1:** Establish project principles
-
-Go to the project folder and run your AI agent. In our example, we're using `claude`.
-
-![Bootstrapping Claude Code environment](./media/bootstrap-claude-code.gif)
-
-You will know that things are configured correctly if you see the `/arb.constitution`, `/arb.specify`, and `/arb.plan` commands available.
-
-The first step should be establishing your project's governing principles using the `/arb.constitution` command. This helps ensure consistent decision-making throughout all subsequent development phases:
+The first step should be establishing your project's governing principles using the `/arb.constitution` command:
 
 ```text
-/arb.constitution Create principles focused on code quality, testing standards, user experience consistency, and performance requirements. Include governance for how these principles should guide technical decisions and implementation choices.
+/arb.constitution Create principles focused on cost optimization, security requirements, availability targets, technology standardization, and ADR requirements for new technologies
 ```
 
-This step creates or updates the `.specify/memory/constitution.md` file with your project's foundational guidelines that the AI agent will reference during specification, planning, and implementation phases.
+This creates or updates the `.specify/memory/constitution.md` file with your project's foundational guidelines.
 
-### **STEP 2:** Create project specifications
+### **STEP 2:** Create Architecture Decision Records
 
-With your project principles established, you can now create the functional specifications. Use the `/arb.specify` command and then provide the concrete requirements for the project you want to develop.
-
-> [!IMPORTANT]
-> Be as explicit as possible about *what* you are trying to build and *why*. **Do not focus on the tech stack at this point**.
-
-An example prompt:
+As you make architectural decisions, document them using `/arb.adr`:
 
 ```text
-Develop Taskify, a team productivity platform. It should allow users to create projects, add team members,
-assign tasks, comment and move tasks between boards in Kanban style. In this initial phase for this feature,
-let's call it "Create Taskify," let's have multiple users but the users will be declared ahead of time, predefined.
-I want five users in two different categories, one product manager and four engineers. Let's create three
-different sample projects. Let's have the standard Kanban columns for the status of each task, such as "To Do,"
-"In Progress," "In Review," and "Done." There will be no login for this application as this is just the very
-first testing thing to ensure that our basic features are set up. For each task in the UI for a task card,
-you should be able to change the current status of the task between the different columns in the Kanban work board.
-You should be able to leave an unlimited number of comments for a particular card. You should be able to, from that task
-card, assign one of the valid users. When you first launch Taskify, it's going to give you a list of the five users to pick
-from. There will be no password required. When you click on a user, you go into the main view, which displays the list of
-projects. When you click on a project, you open the Kanban board for that project. You're going to see the columns.
-You'll be able to drag and drop cards back and forth between different columns. You will see any cards that are
-assigned to you, the currently logged in user, in a different color from all the other ones, so you can quickly
-see yours. You can edit any comments that you make, but you can't edit comments that other people made. You can
-delete any comments that you made, but you can't delete comments anybody else made.
+/arb.adr Use PostgreSQL for primary database - need ACID compliance, strong ecosystem, team familiarity
 ```
 
-After this prompt is entered, you should see Claude Code kick off the planning and spec drafting process. Claude Code will also trigger some of the built-in scripts to set up the repository.
+The ADR will be created with:
+- Sequential numbering (ADR-001, ADR-002, etc.)
+- Structured sections for context, decision, consequences
+- Alternatives considered with trade-offs
+- FinOps impact analysis
 
-Once this step is completed, you should have a new branch created (e.g., `001-create-taskify`), as well as a new specification in the `specs/001-create-taskify` directory.
+### **STEP 3:** Create Feature Specifications
 
-The produced specification should contain a set of features and functional requirements, as defined in the template.
-
-At this stage, your project folder contents should resemble the following:
+When defining new features, use `/arb.specify`:
 
 ```text
-└── .specify
-    ├── memory
-    │  └── constitution.md
-    ├── scripts
-    │  ├── check-prerequisites.sh
-    │  ├── common.sh
-    │  ├── create-new-feature.sh
-    │  ├── setup-plan.sh
-    │  └── update-claude-md.sh
-    ├── specs
-    │  └── 001-create-taskify
-    │      └── spec.md
-    └── templates
-        ├── plan-template.md
-        └── spec-template.md
+/arb.specify Build user authentication with SSO support. Users should be able to log in with corporate credentials. Must support MFA. Need audit logging for compliance. Session timeout after 30 minutes of inactivity.
 ```
 
-### **STEP 3:** Functional specification clarification (required before planning)
+This creates a structured specification with:
+- Quantifiable value metrics
+- Features with acceptance criteria
+- Functional requirements
+- References to applicable ADRs
 
-With the baseline specification created, you can go ahead and clarify any of the requirements that were not captured properly within the first shot attempt.
+### **STEP 4:** Clarify Specifications
 
-You should run the structured clarification workflow **before** creating a technical plan to reduce rework downstream.
-
-Preferred order:
-
-1. Use `/arb.clarify` (structured) – sequential, coverage-based questioning that records answers in a Clarifications section.
-2. Optionally follow up with ad-hoc free-form refinement if something still feels vague.
-
-If you intentionally want to skip clarification (e.g., spike or exploratory prototype), explicitly state that so the agent doesn't block on missing clarifications.
-
-Example free-form refinement prompt (after `/arb.clarify` if still needed):
+Before creating an implementation plan, run `/arb.clarify` to identify ambiguities:
 
 ```text
-For each sample project or project that you create there should be a variable number of tasks between 5 and 15
-tasks for each one randomly distributed into different states of completion. Make sure that there's at least
-one task in each stage of completion.
+/arb.clarify
 ```
 
-You should also ask Claude Code to validate the **Review & Acceptance Checklist**, checking off the things that are validated/pass the requirements, and leave the ones that are not unchecked. The following prompt can be used:
+This walks through a structured questionnaire to resolve underspecified areas and records clarifications directly in the spec.
+
+### **STEP 5:** Generate Implementation Plan
+
+With a clarified specification, create the technical plan:
 
 ```text
-Read the review and acceptance checklist, and check off each item in the checklist if the feature spec meets the criteria. Leave it empty if it does not.
+/arb.plan OAuth 2.0 with OIDC, Azure AD integration, Redis for sessions, PostgreSQL for user data
 ```
 
-It's important to use the interaction with Claude Code as an opportunity to clarify and ask questions around the specification - **do not treat its first attempt as final**.
+### **STEP 6:** Validate Alignment
 
-### **STEP 4:** Generate a plan
-
-You can now be specific about the tech stack and other technical requirements. You can use the `/arb.plan` command that is built into the project template with a prompt like this:
+Run `/arb.analyze` to check consistency across all artifacts:
 
 ```text
-We are going to generate this using .NET Aspire, using Postgres as the database. The frontend should use
-Blazor server with drag-and-drop task boards, real-time updates. There should be a REST API created with a projects API,
-tasks API, and a notifications API.
+/arb.analyze
 ```
 
-The output of this step will include a number of implementation detail documents, with your directory tree resembling this:
-
-```text
-.
-├── CLAUDE.md
-├── memory
-│  └── constitution.md
-├── scripts
-│  ├── check-prerequisites.sh
-│  ├── common.sh
-│  ├── create-new-feature.sh
-│  ├── setup-plan.sh
-│  └── update-claude-md.sh
-├── specs
-│  └── 001-create-taskify
-│      ├── contracts
-│      │  ├── api-spec.json
-│      │  └── signalr-spec.md
-│      ├── data-model.md
-│      ├── plan.md
-│      ├── quickstart.md
-│      ├── research.md
-│      └── spec.md
-└── templates
-    ├── CLAUDE-template.md
-    ├── plan-template.md
-    └── spec-template.md
-```
-
-Check the `research.md` document to ensure that the right tech stack is used, based on your instructions. You can ask Claude Code to refine it if any of the components stand out, or even have it check the locally-installed version of the platform/framework you want to use (e.g., .NET).
-
-Additionally, you might want to ask Claude Code to research details about the chosen tech stack if it's something that is rapidly changing (e.g., .NET Aspire, JS frameworks), with a prompt like this:
-
-```text
-I want you to go through the implementation plan and implementation details, looking for areas that could
-benefit from additional research as .NET Aspire is a rapidly changing library. For those areas that you identify that
-require further research, I want you to update the research document with additional details about the specific
-versions that we are going to be using in this Taskify application and spawn parallel research tasks to clarify
-any details using research from the web.
-```
-
-During this process, you might find that Claude Code gets stuck researching the wrong thing - you can help nudge it in the right direction with a prompt like this:
-
-```text
-I think we need to break this down into a series of steps. First, identify a list of tasks
-that you would need to do during implementation that you're not sure of or would benefit
-from further research. Write down a list of those tasks. And then for each one of these tasks,
-I want you to spin up a separate research task so that the net results is we are researching
-all of those very specific tasks in parallel. What I saw you doing was it looks like you were
-researching .NET Aspire in general and I don't think that's gonna do much for us in this case.
-That's way too untargeted research. The research needs to help you solve a specific targeted question.
-```
-
-> [!NOTE]
-> Claude Code might be over-eager and add components that you did not ask for. Ask it to clarify the rationale and the source of the change.
-
-### **STEP 5:** Have Claude Code validate the plan
-
-With the plan in place, you should have Claude Code run through it to make sure that there are no missing pieces. You can use a prompt like this:
-
-```text
-Now I want you to go and audit the implementation plan and the implementation detail files.
-Read through it with an eye on determining whether or not there is a sequence of tasks that you need
-to be doing that are obvious from reading this. Because I don't know if there's enough here. For example,
-when I look at the core implementation, it would be useful to reference the appropriate places in the implementation
-details where it can find the information as it walks through each step in the core implementation or in the refinement.
-```
-
-This helps refine the implementation plan and helps you avoid potential blind spots that Claude Code missed in its planning cycle. Once the initial refinement pass is complete, ask Claude Code to go through the checklist once more before you can get to the implementation.
-
-You can also ask Claude Code (if you have the [GitHub CLI](https://docs.github.com/en/github-cli/github-cli) installed) to go ahead and create a pull request from your current branch to `main` with a detailed description, to make sure that the effort is properly tracked.
-
-> [!NOTE]
-> Before you have the agent implement it, it's also worth prompting Claude Code to cross-check the details to see if there are any over-engineered pieces (remember - it can be over-eager). If over-engineered components or decisions exist, you can ask Claude Code to resolve them. Ensure that Claude Code follows the [constitution](base/memory/constitution.md) as the foundational piece that it must adhere to when establishing the plan.
+This validates:
+- Spec requirements are addressed in the plan
+- Plan references valid ADRs
+- Constitution principles are followed
+- No terminology drift or contradictions
 
 </details>
 
@@ -607,16 +401,20 @@ rm gcm-linux_amd64.2.6.1.deb
 
 ## 👥 Maintainers
 
-- Den Delimarsky ([@localden](https://github.com/localden))
-- John Lam ([@jflam](https://github.com/jflam))
+- Tim Heuer ([@timheuer](https://github.com/timheuer))
 
 ## 💬 Support
 
-For support, please open a [GitHub issue](https://github.com/github/spec-kit/issues/new). We welcome bug reports, feature requests, and questions about using Spec-Driven Development.
+For support, please open a [GitHub issue](https://github.com/timheuer/spec-kit-arb/issues/new). We welcome bug reports, feature requests, and questions.
 
 ## 🙏 Acknowledgements
 
-This project is heavily influenced by and based on the work and research of [John Lam](https://github.com/jflam).
+This project is forked from and inspired by [github/spec-kit](https://github.com/github/spec-kit), created by:
+
+- Den Delimarsky ([@localden](https://github.com/localden))
+- John Lam ([@jflam](https://github.com/jflam))
+
+The Spec-Driven Development methodology and original toolkit provided the foundation for this ARB-focused variant.
 
 ## 📄 License
 
